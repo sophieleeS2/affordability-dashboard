@@ -1,0 +1,3795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0A0E1A">
+<title>Liverpool · Galaxy Finance Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0E1A; --ink-2:#151B2E; --paper:#F4F5F7; --card:#FFFFFF;
+    --line:#E4E7EC; --muted:#6B7280; --text:#1B2130;
+    --brand:#E4007C; --brand-soft:rgba(228,0,124,.10); --brand-2:#7B2FF7;
+    --radius:16px; --shadow:0 6px 24px rgba(10,14,26,.08);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--paper); color:var(--text); line-height:1.45; font-size:16px;
+    -webkit-font-smoothing:antialiased; padding-bottom:104px;
+  }
+  .wrap{max-width:520px;margin:0 auto;}
+
+  /* Header */
+  header{background:var(--ink);color:#fff;padding:16px 20px;padding-top:calc(16px + env(safe-area-inset-top));}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .brandrow{display:flex;align-items:center;gap:10px;}
+  .brandrow .lv{font-weight:800;letter-spacing:.14em;font-size:13px;color:#fff;}
+  .brandrow .x{color:var(--brand);font-weight:700;font-size:13px;}
+  .brandrow .gx{font-weight:600;font-size:13px;color:#C7CBD6;letter-spacing:.02em;}
+  .langtoggle{display:inline-flex;border:1px solid rgba(255,255,255,.28);border-radius:999px;overflow:hidden;flex:none;}
+  .langtoggle button{background:transparent;color:#9AA0AE;border:none;font-family:inherit;font-weight:700;font-size:12px;padding:7px 13px;cursor:pointer;letter-spacing:.05em;min-height:34px;}
+  .langtoggle button[aria-pressed="true"]{background:#fff;color:var(--ink);}
+  .topbar-right{display:flex;align-items:center;gap:10px;flex:none;}
+  .gearbtn{width:36px;height:36px;flex:none;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:transparent;color:#C7CBD6;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+  .gearbtn svg{width:18px;height:18px;}
+  .gearbtn:active{transform:scale(.94);}
+  .gearbtn.unset{position:relative;}
+  .gearbtn.unset::after{content:"";position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--brand);border:1.5px solid var(--ink);}
+  h1{font-size:22px;font-weight:700;margin:12px 0 2px;letter-spacing:-.01em;}
+  .sub{font-size:13px;color:#9AA0AE;margin:0;}
+
+  /* Tab */
+  .tabs{background:var(--ink);padding:6px 20px 0;display:flex;gap:22px;}
+  .tab{display:inline-flex;align-items:center;gap:7px;color:#8A90A0;font-weight:600;font-size:15px;padding:10px 2px 12px;border-bottom:3px solid transparent;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;cursor:pointer;}
+  .tab[aria-selected="true"]{color:#fff;border-bottom-color:var(--brand);}
+  .tab svg{width:18px;height:18px;}
+
+  /* Panels */
+  #panel-scplus{display:none;}
+  body.tab-scplus #panel-phone{display:none;}
+  body.tab-scplus #panel-scplus{display:block;}
+
+  /* SC+ device chip */
+  .scdev{display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:16px;}
+  .scdev .ic{width:38px;height:38px;border-radius:10px;background:var(--brand-soft);display:flex;align-items:center;justify-content:center;flex:none;}
+  .scdev .ic svg{width:20px;height:20px;color:var(--brand);}
+  .scdev .mt{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:1px;}
+  .scdev .mn{font-size:15px;font-weight:700;color:var(--text);line-height:1.2;}
+
+  /* SC+ product option cards */
+  .scopts{display:flex;flex-direction:column;gap:10px;}
+  .scopt{width:100%;text-align:left;font-family:inherit;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px 15px;cursor:pointer;transition:border-color .15s,box-shadow .15s;position:relative;}
+  .scopt:active{transform:scale(.995);}
+  .scopt[aria-pressed="true"]{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft);}
+  .scopt-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .scopt-name{font-size:15.5px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+  .scopt-name .tag{width:17px;height:17px;color:var(--brand);flex:none;}
+  .scopt-from{font-size:13px;font-weight:700;color:var(--brand);white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .scopt-feat{margin:9px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:5px 8px;}
+  .scopt-feat li{font-size:11.5px;color:var(--muted);background:#F4F5F7;border-radius:999px;padding:3px 9px;font-weight:500;}
+  .scopt.none{border-style:dashed;}
+  .scopt.none .scopt-name{color:var(--muted);font-weight:600;}
+  .scopt-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;}
+  .scopt[aria-pressed="true"] .scopt-radio{border-color:var(--brand);}
+  .scopt[aria-pressed="true"] .scopt-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--brand);}
+
+  /* Payment sub-options (revealed) */
+  .scpay{margin-top:12px;border-top:1px dashed var(--line);padding-top:13px;display:none;}
+  .scopt[aria-pressed="true"] .scpay{display:block;}
+  .scpay-lbl{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;margin-bottom:9px;text-transform:uppercase;}
+  .payrow{display:flex;flex-direction:column;gap:8px;}
+  .payopt{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font-family:inherit;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:11px 13px;cursor:pointer;}
+  .payopt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);}
+  .payopt[aria-pressed="true"] .pay-k,.payopt[aria-pressed="true"] .pay-v,.payopt[aria-pressed="true"] .pay-sub{color:#fff;}
+  .pay-k{font-size:13.5px;font-weight:600;color:var(--text);}
+  .pay-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+  .pay-v{font-size:15px;font-weight:800;color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .pay-v .u{font-size:11px;font-weight:600;color:var(--muted);margin-left:2px;}
+  .payopt[aria-pressed="true"] .pay-v .u{color:#C7CBD6;}
+  .scnote{font-size:12px;color:var(--muted);line-height:1.5;margin-top:14px;background:#F7F8FA;border:1px solid var(--line);border-radius:10px;padding:11px 13px;}
+
+  /* Body */
+  main{padding:18px 16px 8px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 16px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .field{margin-bottom:18px;} .field:last-child{margin-bottom:0;}
+  label.lbl{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px;}
+
+  .selectwrap{position:relative;}
+  select{width:100%;appearance:none;-webkit-appearance:none;font-family:inherit;font-size:16px;font-weight:600;color:var(--text);background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 44px 14px 14px;line-height:1.2;}
+  select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft);}
+  .selectwrap::after{content:"";position:absolute;right:16px;top:50%;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none;}
+  .rrp-hint{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;font-size:13px;color:var(--muted);gap:10px;}
+  .rrp-hint b{font-size:15px;color:var(--text);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+  .seg{display:flex;gap:8px;}
+  .seg button{flex:1;font-family:inherit;font-size:15px;font-weight:600;color:var(--text);background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:13px 0;cursor:pointer;transition:all .15s ease;min-height:48px;}
+  .seg button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .seg.brand button[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);}
+  .seg.seg-term{gap:6px;}
+  .seg.seg-term button{font-size:14px;padding:12px 0;}
+  @media (max-width:360px){ .seg.seg-term button{font-size:13px;} }
+
+  .money{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;}
+  .money:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft);}
+  .money .cur{padding:0 12px;font-size:14px;font-weight:700;color:var(--muted);background:#F7F8FA;align-self:stretch;display:flex;align-items:center;border-right:1px solid var(--line);white-space:nowrap;}
+  .money .cur-r{border-right:none;border-left:1px solid var(--line);}
+  .money input{flex:1;border:none;outline:none;background:transparent;font-family:inherit;font-size:16px;font-weight:600;color:var(--text);padding:14px 12px;width:100%;font-variant-numeric:tabular-nums;}
+  .money input::placeholder{color:#B4B9C4;font-weight:500;}
+  .hint{font-size:12px;color:var(--muted);margin-top:7px;}
+
+  #tradeinField,#rateField{display:none;}
+  #tradeinField.show,#rateField.show{display:block;}
+
+  /* Result */
+  .result{background:linear-gradient(135deg,var(--ink) 0%,var(--ink-2) 60%);border:none;color:#fff;overflow:hidden;position:relative;padding:0;}
+  .result .top{padding:20px 18px 16px;}
+  .result .kicker{font-size:12px;letter-spacing:.08em;color:#9AA0AE;font-weight:600;margin:0 0 4px;}
+  .amount{font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1.05;font-variant-numeric:tabular-nums;margin:0;}
+  .amount .cursym{font-size:20px;font-weight:700;color:#C7CBD6;margin-right:6px;vertical-align:6px;}
+  .term-note{margin:6px 0 0;font-size:14px;color:#C7CBD6;}
+  .term-note b{color:var(--brand);font-weight:700;}
+  .accentbar{height:4px;background:linear-gradient(90deg,var(--brand),var(--brand-2));}
+  .breakdown{padding:14px 18px 18px;background:rgba(255,255,255,.03);}
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;font-size:15px;border-bottom:1px solid rgba(255,255,255,.08);gap:10px;}
+  .row:last-child{border-bottom:none;}
+  .row .k{color:#C7CBD6;} .row .v{font-weight:600;font-variant-numeric:tabular-nums;color:#fff;white-space:nowrap;}
+  .row .v.minus{color:#FF9BCB;}
+  .row.total{margin-top:4px;padding-top:12px;border-top:1.5px solid rgba(255,255,255,.18);border-bottom:none;}
+  .row.total .k{color:#fff;font-weight:700;} .row.total .v{font-weight:800;}
+
+  .actions{display:flex;gap:8px;margin:2px 0 14px;flex-wrap:wrap;}
+  .btn{flex:1 1 0;min-width:88px;font-family:inherit;font-size:13.5px;font-weight:600;padding:13px 6px;border-radius:12px;cursor:pointer;min-height:50px;display:flex;align-items:center;justify-content:center;gap:6px;border:1.5px solid var(--line);background:#fff;color:var(--text);text-align:center;line-height:1.15;}
+  .btn svg{width:17px;height:17px;}
+  .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand);}
+  .btn:active{transform:scale(.98);}
+
+  .salestalk{border-left:4px solid var(--brand);}
+  .st-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;}
+  .st-title{font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--brand);display:flex;align-items:center;gap:7px;}
+  .st-title svg{width:16px;height:16px;flex:none;}
+  .st-copy{font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);background:#F7F8FA;border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;flex:none;}
+  .st-copy:active{transform:scale(.97);}
+  .st-body{margin:0;font-size:15px;line-height:1.6;color:var(--text);}
+
+  .disclaimer{font-size:11.5px;color:var(--muted);line-height:1.5;padding:0 4px 12px;}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .tabs,.actions,.sticky,#toast,.st-copy,.hint,.langtoggle{display:none !important;}
+    /* Phone tab: hide the phone input card. SC+ tab: hide the plan-picker card & device chip. */
+    body:not(.tab-scplus) #panel-phone>.card:first-of-type{display:none;}
+    body.tab-scplus #panel-scplus>.card:first-of-type{display:none;}
+    body.tab-scplus .scdev{display:none;}
+    .scpay{display:block !important;} /* show chosen payment in print */
+    .scopt:not([aria-pressed="true"]){display:none;} /* print only the selected plan */
+    header{background:#fff;color:#000;padding:0 0 8px;}
+    .brandrow .gx{color:#333;} .brandrow .lv{color:#000;}
+    h1{color:#000;} .sub{color:#444;}
+    .card{box-shadow:none;border:1px solid #bbb;break-inside:avoid;margin-bottom:12px;}
+    .result{background:#fff !important;color:#000;border:1px solid #bbb;}
+    .result .kicker{color:#444;} .term-note{color:#222;}
+    .amount,.amount .cursym{color:#000;}
+    .accentbar{background:#000;height:2px;}
+    .breakdown{background:#fff;}
+    .row .k,.row .v,.row .v.minus{color:#000 !important;}
+    .row{border-color:#ddd;}
+    .salestalk{border-left:4px solid #000;} .st-title{color:#000;}
+    .disclaimer{color:#555;}
+    .scopt{border:1px solid #bbb;break-inside:avoid;} .scopt-from{color:#000;}
+    .scopt-feat li{background:#eee;color:#333;}
+    .payopt[aria-pressed="true"]{background:#fff;border:1px solid #000;}
+    .payopt[aria-pressed="true"] .pay-k,.payopt[aria-pressed="true"] .pay-v,.payopt[aria-pressed="true"] .pay-sub{color:#000;}
+    .scdev{border:1px solid #bbb;} .scdev .ic{background:#eee;} .scdev .ic svg{color:#000;}
+    .scnote{background:#fff;border:1px solid #bbb;color:#333;}
+  }
+
+  .sticky{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(10,14,26,.97);backdrop-filter:blur(8px);color:#fff;padding:12px 18px;padding-bottom:calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -6px 24px rgba(10,14,26,.18);}
+  .sticky .lab{font-size:12px;color:#9AA0AE;font-weight:600;}
+  .sticky .big{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1;}
+  .sticky .big .cursym{font-size:14px;color:#C7CBD6;margin-right:4px;vertical-align:3px;}
+  .sticky .rt{text-align:right;} .sticky .rt .term{font-size:12px;color:var(--brand);font-weight:700;}
+
+  /* Modal (QR share + Care+ info) */
+  .modal{position:fixed;inset:0;z-index:40;display:none;align-items:flex-end;justify-content:center;background:rgba(10,14,26,.55);backdrop-filter:blur(3px);}
+  .modal.show{display:flex;}
+  .sheet{background:#fff;width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:20px 20px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(10,14,26,.3);max-height:88vh;overflow-y:auto;animation:sheetup .28s cubic-bezier(.16,1,.3,1);}
+  @keyframes sheetup{from{transform:translateY(24px);opacity:.6;}to{transform:translateY(0);opacity:1;}}
+  .sheet-grip{width:40px;height:4px;border-radius:999px;background:var(--line);margin:0 auto 16px;}
+  .sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;}
+  .sheet-title{font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin:0;}
+  .sheet-sub{font-size:13px;color:var(--muted);margin:3px 0 0;}
+  .sheet-x{flex:none;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .sheet-x:active{transform:scale(.94);}
+
+  .qrbox{display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 0 4px;}
+  .qrframe{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);}
+  .qrframe svg{display:block;width:220px;height:220px;}
+  .qr-cap{font-size:13px;color:var(--muted);text-align:center;line-height:1.5;max-width:320px;}
+  .qr-link{width:100%;display:flex;align-items:center;gap:8px;background:#F7F8FA;border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;margin-top:4px;}
+  .qr-link input{flex:1;border:none;background:transparent;font-family:inherit;font-size:13px;color:var(--text);outline:none;text-overflow:ellipsis;}
+  .qr-link button{flex:none;font-family:inherit;font-size:13px;font-weight:700;color:var(--brand);background:none;border:none;cursor:pointer;padding:4px 6px;}
+  .qr-warn{width:100%;background:rgba(178,106,0,.09);border:1px solid rgba(178,106,0,.25);color:#8a5200;border-radius:12px;padding:11px 13px;font-size:12.5px;line-height:1.5;margin-bottom:4px;}
+  .qr-warn b{font-weight:700;}
+  .qr-setlink{background:none;border:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--brand);cursor:pointer;padding:6px;margin-top:2px;text-decoration:underline;text-underline-offset:2px;}
+
+  /* Settings sheet */
+  .set-field{margin-bottom:18px;}
+  .set-field label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:7px;}
+  .set-input{width:100%;font-family:inherit;font-size:15px;color:var(--text);background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;outline:none;}
+  .set-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft);}
+  .set-input.bad{border-color:#C0392B;box-shadow:0 0 0 3px rgba(192,57,43,.12);}
+  .set-help{font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px;}
+  .set-example{font-size:12px;color:var(--muted);margin-top:6px;}
+  .set-example code{background:#F4F5F7;border-radius:6px;padding:2px 7px;font-size:12px;color:var(--text);word-break:break-all;}
+  .set-preview{background:#F7F8FA;border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-top:6px;font-size:12px;color:var(--muted);line-height:1.5;word-break:break-all;}
+  .set-preview b{color:var(--text);font-weight:600;}
+  .set-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:999px;padding:5px 11px;margin-bottom:14px;}
+  .set-status.ok{color:#0A7C42;background:rgba(10,124,66,.10);}
+  .set-status.warn{color:#B26A00;background:rgba(178,106,0,.10);}
+  .set-actions{display:flex;gap:8px;margin-top:20px;}
+  .set-actions .btn{flex:1;min-height:48px;}
+  .set-actions .btn.ghost{background:#fff;color:var(--muted);}
+
+  /* Care+ info popup content */
+  .info-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--brand);background:var(--brand-soft);border-radius:999px;padding:5px 12px;margin-bottom:14px;}
+  .info-price{font-size:15px;font-weight:800;color:var(--ink);}
+  .info-sec{margin-bottom:16px;}
+  .info-sec:last-child{margin-bottom:0;}
+  .info-sec h4{font-size:13px;font-weight:700;color:var(--ink);margin:0 0 8px;display:flex;align-items:center;gap:7px;}
+  .info-sec h4 svg{width:15px;height:15px;flex:none;}
+  .info-sec h4.ok{color:#0A7C42;} .info-sec h4.no{color:#C0392B;} .info-sec h4.how{color:var(--brand-2);}
+  .info-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
+  .info-list li{font-size:13.5px;color:var(--text);line-height:1.45;padding-left:22px;position:relative;}
+  .info-list li::before{position:absolute;left:0;top:0;font-weight:700;}
+  .info-list.ok li::before{content:"✓";color:#0A7C42;}
+  .info-list.no li::before{content:"✕";color:#C0392B;}
+  .info-list.how{counter-reset:step;}
+  .info-list.how li{padding-left:26px;}
+  .info-list.how li::before{counter-increment:step;content:counter(step);background:var(--brand);color:#fff;width:17px;height:17px;border-radius:50%;font-size:11px;display:flex;align-items:center;justify-content:center;top:1px;}
+  .info-foot{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:16px;border-top:1px solid var(--line);padding-top:12px;}
+
+  /* small info trigger on plan cards */
+  .scopt-info{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--muted);font-size:12px;font-weight:800;font-family:Georgia,serif;font-style:italic;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;margin-left:2px;}
+  .scopt-info:active{transform:scale(.9);}
+  .scopt-name{flex:1;min-width:0;}
+
+  @media print{ .modal{display:none !important;} }
+
+  #toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:50;box-shadow:var(--shadow);}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media (max-width:360px){ .amount{font-size:34px;} h1{font-size:20px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="topbar">
+      <div class="brandrow">
+        <span class="lv">LIVERPOOL</span><span class="x">&times;</span><span class="gx">Samsung Galaxy</span>
+      </div>
+      <div class="topbar-right">
+        <div class="langtoggle" id="langToggle">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="es" aria-pressed="false">ES</button>
+        </div>
+        <button type="button" class="gearbtn" id="gearBtn" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+    <h1 data-i18n="title">Finance Simulator</h1>
+    <p class="sub" data-i18n="sub">EIP / MSI monthly payment &middot; Promo period 2026</p>
+  </header>
+
+  <div class="tabs" id="tabs">
+    <button type="button" class="tab" id="tabPhone" data-tab="phone" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      <span data-i18n="tab_smartphone">Smartphone</span>
+    </button>
+    <button type="button" class="tab" id="tabSc" data-tab="scplus" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      <span data-i18n="tab_scplus">Samsung Care+</span>
+    </button>
+  </div>
+
+  <main>
+   <div id="panel-phone">
+    <div class="card">
+      <div class="field">
+        <label class="lbl" for="model" data-i18n="lbl_model">Model</label>
+        <div class="selectwrap">
+          <select id="model">
+            <optgroup label="Galaxy S26 Series">
+              <option value="0" selected>Galaxy S26 Ultra · 512GB</option>
+              <option value="1">Galaxy S26 Ultra · 1TB</option>
+              <option value="2">Galaxy S26+ · 512GB</option>
+              <option value="3">Galaxy S26 · 256GB</option>
+            </optgroup>
+            <optgroup label="Galaxy Z Series">
+              <option value="4">Galaxy Z Fold8 Ultra · 1TB</option>
+              <option value="5">Galaxy Z Fold8 Ultra · 512GB</option>
+              <option value="6">Galaxy Z Fold8 · 512GB</option>
+              <option value="7">Galaxy Z Flip8 · 512GB</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="rrp-hint"><span data-i18n="rrp_label">Recommended retail price (RRP)</span><b id="rrpHint">MXN 37,999</b></div>
+      </div>
+
+      <div class="field">
+        <label class="lbl" data-i18n="lbl_tradein">Trade-in</label>
+        <div class="seg brand" id="tradeToggle">
+          <button type="button" data-trade="off" aria-pressed="true" data-i18n="t_no">No</button>
+          <button type="button" data-trade="on" aria-pressed="false" data-i18n="t_yes">Yes</button>
+        </div>
+        <div id="tradeinField" style="margin-top:14px;">
+          <label class="lbl" for="tradein" data-i18n="tradein_label">Trade-in device value (RV)</label>
+          <div class="money">
+            <span class="cur">MXN</span>
+            <input id="tradein" type="text" inputmode="decimal" placeholder="Enter residual value" data-i18n-ph="tradein_ph">
+          </div>
+          <div class="hint" data-i18n="tradein_hint">Residual value credited for the customer's old device.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl" for="promo" data-i18n="lbl_promo">Promotion / discount</label>
+        <div class="money">
+          <span class="cur">MXN</span>
+          <input id="promo" type="text" inputmode="decimal" placeholder="Enter promo amount" data-i18n-ph="promo_ph">
+        </div>
+        <div class="hint" data-i18n="promo_hint">Any additional instant discount applied to the price.</div>
+      </div>
+
+      <div class="field">
+        <label class="lbl" data-i18n="lbl_term">Financing term (EIP / MSI)</label>
+        <div class="seg seg-term" id="termToggle">
+          <button type="button" data-term="12" aria-pressed="false">12 mo</button>
+          <button type="button" data-term="18" aria-pressed="false">18 mo</button>
+          <button type="button" data-term="20" aria-pressed="false">20 mo</button>
+          <button type="button" data-term="24" aria-pressed="true">24 mo</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl" data-i18n="lbl_msi">Interest-free months (MSI)?</label>
+        <div class="seg brand" id="msiToggle">
+          <button type="button" data-msi="yes" aria-pressed="true" data-i18n="msi_yes">Yes</button>
+          <button type="button" data-msi="no" aria-pressed="false" data-i18n="msi_no">No</button>
+        </div>
+        <div id="rateField" style="margin-top:14px;">
+          <label class="lbl" for="rate" data-i18n="lbl_rate">Annual interest rate</label>
+          <div class="money">
+            <input id="rate" type="text" inputmode="decimal" placeholder="Enter annual rate (%)" data-i18n-ph="rate_ph">
+            <span class="cur cur-r" data-i18n="rate_unit">% / yr</span>
+          </div>
+          <div class="hint" data-i18n="rate_hint">The annual rate is divided by 12 and applied to each monthly payment.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card result">
+      <div class="top">
+        <p class="kicker" data-i18n="res_kicker">MONTHLY PAYMENT</p>
+        <p class="amount"><span class="cursym">MXN</span><span id="monthly">1,583.29</span></p>
+        <p class="term-note"><span id="resultModel">Galaxy S26 Ultra · 512GB</span></p>
+        <p class="term-note" id="termLine">24 payments · interest-free (MSI)</p>
+      </div>
+      <div class="accentbar"></div>
+      <div class="breakdown" id="breakdown">
+        <div class="row"><span class="k" data-i18n="bd_rrp">RRP</span><span class="v" id="bRRP">MXN 37,999.00</span></div>
+        <div class="row" id="bTradeRow"><span class="k" data-i18n="bd_trade">Trade-in</span><span class="v minus" id="bTrade">– MXN 0.00</span></div>
+        <div class="row"><span class="k" data-i18n="bd_promo">Promotion</span><span class="v minus" id="bPromo">– MXN 0.00</span></div>
+        <div class="row total"><span class="k" data-i18n="bd_finance">Amount to finance</span><span class="v" id="bFinance">MXN 37,999.00</span></div>
+        <div class="row" id="bRateRow" style="display:none;"><span class="k" data-i18n="bd_rate">Annual interest rate</span><span class="v" id="bRate">0%</span></div>
+        <div class="row"><span class="k" data-i18n="bd_term">÷ Term</span><span class="v" id="bTerm">24 months</span></div>
+        <div class="row" id="bTotalRow" style="display:none;"><span class="k" data-i18n="bd_total">Total to pay</span><span class="v" id="bTotal">MXN 0.00</span></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="copyBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span data-i18n="act_copy">Copy quote</span>
+      </button>
+      <button class="btn" id="shareBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="18" y1="14" x2="21" y2="14"/><line x1="18" y1="18" x2="21" y2="21"/><line x1="14" y1="18" x2="14" y2="18"/></svg>
+        <span data-i18n="act_share">Share · QR</span>
+      </button>
+      <button class="btn" id="pdfBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+        <span data-i18n="act_pdf">PDF</span>
+      </button>
+      <button class="btn" id="printBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span data-i18n="act_print">Print</span>
+      </button>
+      <button class="btn" id="resetBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+        <span data-i18n="act_reset">Reset</span>
+      </button>
+    </div>
+
+    <div class="card salestalk">
+      <div class="st-head">
+        <span class="st-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span data-i18n="st_title">Recommended sales talk</span>
+        </span>
+        <button class="st-copy" id="copyTalkBtn" data-i18n="st_copy">Copy</button>
+      </div>
+      <p class="st-body" id="salesTalk"></p>
+    </div>
+
+    <p class="disclaimer" data-i18n="disclaimer">All figures are a simulation for reference only.</p>
+   </div><!-- /panel-phone -->
+
+   <div id="panel-scplus">
+    <div class="scdev">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
+      <div>
+        <div class="mt" data-i18n="sc_for">Samsung Care+ for</div>
+        <div class="mn" id="scModelName">Galaxy S26 Ultra · 512GB</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="lbl" data-i18n="sc_choose">Choose a protection plan</label>
+      <div class="scopts" id="scOpts"></div>
+    </div>
+
+    <div class="card result" id="scResultCard">
+      <div class="top">
+        <p class="kicker" data-i18n="sc_res_kicker">SAMSUNG CARE+</p>
+        <p class="amount"><span class="cursym">MXN</span><span id="scAmount">0.00</span><span id="scAmountUnit" class="term-note" style="display:inline;margin-left:8px;color:#C7CBD6;font-size:15px;"></span></p>
+        <p class="term-note" id="scPlanLine">—</p>
+      </div>
+      <div class="accentbar"></div>
+      <div class="breakdown">
+        <div class="row"><span class="k" data-i18n="sc_bd_plan">Plan</span><span class="v" id="scbPlan">—</span></div>
+        <div class="row"><span class="k" data-i18n="sc_bd_pay">Payment option</span><span class="v" id="scbPay">—</span></div>
+        <div class="row"><span class="k" data-i18n="sc_bd_cover">Coverage period</span><span class="v" id="scbCover">—</span></div>
+        <div class="row total"><span class="k" data-i18n="sc_bd_price">Care+ price</span><span class="v" id="scbPrice">—</span></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="scCopyBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span data-i18n="sc_act_copy">Copy Care+ quote</span>
+      </button>
+      <button class="btn" id="scShareBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="18" y1="14" x2="21" y2="14"/><line x1="18" y1="18" x2="21" y2="21"/><line x1="14" y1="18" x2="14" y2="18"/></svg>
+        <span data-i18n="act_share">Share · QR</span>
+      </button>
+      <button class="btn" id="scPdfBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+        <span data-i18n="act_pdf">PDF</span>
+      </button>
+      <button class="btn" id="scPrintBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span data-i18n="act_print">Print</span>
+      </button>
+    </div>
+
+    <div class="card salestalk">
+      <div class="st-head">
+        <span class="st-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span data-i18n="sc_st_title">Recommended Care+ sales talk</span>
+        </span>
+        <button class="st-copy" id="scCopyTalkBtn" data-i18n="st_copy">Copy</button>
+      </div>
+      <p class="st-body" id="scSalesTalk"></p>
+    </div>
+
+    <div class="scnote" id="scNote"></div>
+    <p class="disclaimer" data-i18n="sc_disclaimer">Samsung Care+ prices are Samsung.com MX reference figures.</p>
+   </div><!-- /panel-scplus -->
+  </main>
+</div>
+
+<div class="sticky" id="stickyPhone">
+  <div><div class="lab" data-i18n="res_kicker">Monthly payment</div><div class="big"><span class="cursym">MXN</span><span id="stickyMonthly">1,583.29</span></div></div>
+  <div class="rt"><div class="lab" id="stickyModel">Galaxy S26 Ultra · 512GB</div><div class="term" id="stickyTerm">24 months</div></div>
+</div>
+<div class="sticky" id="stickySc" style="display:none;">
+  <div><div class="lab" data-i18n="sc_sticky_lab">Samsung Care+</div><div class="big"><span class="cursym">MXN</span><span id="stickyScPrice">—</span><span id="stickyScUnit" style="font-size:13px;color:#C7CBD6;margin-left:4px;"></span></div></div>
+  <div class="rt"><div class="lab" id="stickyScModel">Galaxy S26 Ultra · 512GB</div><div class="term" id="stickyScPlan">—</div></div>
+</div>
+
+<div class="modal" id="setModal">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head">
+      <div>
+        <p class="sheet-title" data-i18n="set_title">Share settings</p>
+        <p class="sheet-sub" data-i18n="set_sub">Set the public web address where this simulator is hosted, so QR codes open correctly on customers' phones.</p>
+      </div>
+      <button class="sheet-x" id="setClose" aria-label="Close">&times;</button>
+    </div>
+    <div id="setStatus"></div>
+    <div class="set-field">
+      <label for="setUrl" data-i18n="set_label">Public URL of this simulator</label>
+      <input id="setUrl" class="set-input" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://...">
+      <div class="set-example" data-i18n-html="set_example">e.g. <code>https://samsung.liverpool.mx/simulator</code></div>
+      <div class="set-help" data-i18n="set_help">Enter the https:// address where the simulator page lives. QR codes and share links will use this base instead of the local file path. Saved on this device only.</div>
+      <div class="set-preview" id="setPreview"></div>
+    </div>
+    <div class="set-actions">
+      <button class="btn ghost" id="setClear" data-i18n="set_clear">Clear</button>
+      <button class="btn primary" id="setSave" data-i18n="set_save">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="shareModal">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head">
+      <div>
+        <p class="sheet-title" data-i18n="qr_title">Scan to view this quote</p>
+        <p class="sheet-sub" data-i18n="qr_sub">The customer scans with their phone camera to reopen this exact simulation.</p>
+      </div>
+      <button class="sheet-x" id="shareClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="qrbox">
+      <div id="qrWarn" class="qr-warn" style="display:none;"></div>
+      <div class="qrframe" id="qrHolder"></div>
+      <p class="qr-cap" id="qrCap"></p>
+      <div class="qr-link">
+        <input id="qrLink" type="text" readonly>
+        <button id="qrCopyLink" data-i18n="qr_copy">Copy</button>
+      </div>
+      <button type="button" class="qr-setlink" id="qrSetLink" data-i18n="qr_setlink">Change hosting URL</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="infoModal">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head">
+      <div>
+        <span class="info-badge">Samsung Care+</span>
+        <p class="sheet-title" id="infoTitle">—</p>
+        <p class="sheet-sub" id="infoPrice"></p>
+      </div>
+      <button class="sheet-x" id="infoClose" aria-label="Close">&times;</button>
+    </div>
+    <div id="infoBody"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* qrcode-generator 1.4.4 — MIT (c) Kazuhiko Arase — inlined for offline field use */
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(row * cellSize, col * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
+</script>
+<script>
+(function(){
+  "use strict";
+
+  var MODELS = [
+    {name:"Galaxy S26 Ultra · 512GB",    price:37999},
+    {name:"Galaxy S26 Ultra · 1TB",      price:45499},
+    {name:"Galaxy S26+ · 512GB",         price:33499},
+    {name:"Galaxy S26 · 256GB",          price:22499},
+    {name:"Galaxy Z Fold8 Ultra · 1TB",  price:63499},
+    {name:"Galaxy Z Fold8 Ultra · 512GB",price:53499},
+    {name:"Galaxy Z Fold8 · 512GB",      price:48499},
+    {name:"Galaxy Z Flip8 · 512GB",      price:32999}
+  ];
+
+  /* ---- Samsung Care+ data (Samsung.com MX, checked 2026-09-03, MXN) ----
+     Each model maps to a SKU with 3 possible products. Each product may offer:
+       monthly  : {price, cover:"24m"}  (includes 2-yr extended warranty) | null
+       oneY     : one-time payment, 1-year coverage                        | null
+       twoY     : one-time payment, 2-year (extended warranty)             | null
+     null = not offered for that model/product. product null = product not sold. */
+  var SC_PLANS = {
+    // Galaxy Z Fold8 Ultra · 1TB
+    zfu1tb:[
+      {id:"dar", monthly:659, oneY:7999, twoY:14499},
+      {id:"da",  monthly:499, oneY:5499, twoY:10999},
+      {id:"pan", monthly:null, oneY:3849, twoY:7329}
+    ],
+    // Galaxy Z Fold8 Ultra · 512GB
+    zfu512:[
+      {id:"dar", monthly:509, oneY:6149, twoY:10999},
+      {id:"da",  monthly:399, oneY:4219, twoY:8649},
+      {id:"pan", monthly:null, oneY:3849, twoY:7329}
+    ],
+    // Galaxy Z Fold8 · 512GB
+    zf512:[
+      {id:"dar", monthly:509, oneY:6149, twoY:10999},
+      {id:"da",  monthly:399, oneY:4219, twoY:8649},
+      {id:"pan", monthly:null, oneY:3849, twoY:7329}
+    ],
+    // Galaxy Z Flip8 · 512GB
+    zflip512:[
+      {id:"dar", monthly:509, oneY:5999, twoY:10999},
+      {id:"da",  monthly:449, oneY:4999, twoY:9999}
+      // Protección de Pantalla not offered
+    ],
+    // Galaxy S26 Ultra (1TB / 512GB — same price)
+    s26u:[
+      {id:"dar", monthly:249, oneY:3219, twoY:5399},
+      {id:"da",  monthly:149, oneY:1489, twoY:3299},
+      {id:"pan", monthly:null, oneY:1229, twoY:2569}
+    ],
+    // Galaxy S26+ / S26 (one-time only, no Pantalla)
+    s26:[
+      {id:"dar", monthly:null, oneY:3219, twoY:5399},
+      {id:"da",  monthly:null, oneY:1489, twoY:3299}
+    ]
+  };
+  // model index (MODELS order) -> SC_PLANS key
+  var SC_MAP = ["s26u","s26u","s26","s26","zfu1tb","zfu512","zf512","zflip512"];
+
+  var I18N = {
+    en:{
+      title:"Finance Simulator",
+      sub:"EIP / MSI monthly payment · Promo period 2026",
+      tab_smartphone:"Smartphone",
+      tab_scplus:"Samsung Care+",
+      sc_for:"Samsung Care+ for",
+      sc_choose:"Choose a protection plan",
+      sc_res_kicker:"SAMSUNG CARE+",
+      sc_pay_label:"Payment option",
+      sc_bd_plan:"Plan", sc_bd_pay:"Payment option", sc_bd_cover:"Coverage period", sc_bd_price:"Care+ price",
+      sc_act_copy:"Copy Care+ quote",
+      sc_st_title:"Recommended Care+ sales talk",
+      sc_sticky_lab:"Samsung Care+",
+      sc_disclaimer:"Samsung Care+ prices are Samsung.com MX reference figures (checked 2026-09-03) and may change without notice. Coverage, service type and deductible follow Samsung Care+ terms; insurer: Virginia Surety Seguros de México (Assurant). 1 event per year; if repair costs more, the device is replaced.",
+      pay_monthly:"Monthly", pay_1y:"One-time · 1 year", pay_2y:"One-time · 2 years",
+      pay_sub_monthly:"24 mo · incl. 2-yr ext. warranty · cancel anytime",
+      pay_sub_1y:"Single payment, 1-year coverage",
+      pay_sub_2y:"Single payment, incl. 2-yr ext. warranty",
+      u_mo:"/mo", cover_24:"24 months", cover_12:"12 months", none_price:"—",
+      none_name:"No protection for my Galaxy",
+      none_desc:"Sin protección para mi Galaxy",
+      prod_dar:"Accidental Damage + Theft", prod_da:"Accidental Damage", prod_pan:"Screen Protection",
+      feat_screen:"Broken screen", feat_liquid:"Liquid damage", feat_theft:"Theft w/ or w/o violence",
+      feat_1yr:"1 event / year", feat_replace:"Replace if repair costs more", feat_expert:"Samsung-certified care",
+      sc_pick:"Select a plan above to see payment options and pricing.",
+      sc_toast_quote:"Care+ quote copied", sc_toast_talk:"Care+ sales talk copied",
+      scq_title:"Samsung Care+ Simulation — Liverpool",
+      scq_model:"Device", scq_plan:"Plan", scq_pay:"Payment", scq_cover:"Coverage", scq_price:"Price",
+      scq_disc:"*Reference only. Final terms per Samsung Care+ conditions & Liverpool POS.",
+      lbl_model:"Model", grp_s:"Galaxy S26 Series", grp_z:"Galaxy Z Series",
+      rrp_label:"Recommended retail price (RRP)",
+      lbl_tradein:"Trade-in", t_no:"No", t_yes:"Yes",
+      tradein_label:"Trade-in device value (RV)",
+      tradein_ph:"Enter residual value",
+      tradein_hint:"Residual value credited for the customer's old device.",
+      lbl_promo:"Promotion / discount",
+      promo_ph:"Enter promo amount",
+      promo_hint:"Any additional instant discount applied to the price.",
+      lbl_term:"Financing term (EIP / MSI)", unit_mo:"mo",
+      lbl_msi:"Interest-free months (MSI)?", msi_yes:"Yes", msi_no:"No",
+      lbl_rate:"Annual interest rate", rate_ph:"Enter annual rate (%)", rate_unit:"% / yr",
+      rate_hint:"The annual rate is divided by 12 and applied to each monthly payment.",
+      res_kicker:"MONTHLY PAYMENT",
+      unit_payments:"payments", unit_months:"months",
+      tn_interestfree:"interest-free (MSI)", tn_annual:"annual interest", tn_financed:"financed (EIP)",
+      bd_rrp:"RRP", bd_trade:"Trade-in", bd_promo:"Promotion",
+      bd_finance:"Amount to finance", bd_rate:"Annual interest rate",
+      bd_term:"÷ Term", bd_total:"Total to pay",
+      act_copy:"Copy quote", act_print:"Print", act_reset:"Reset",
+      act_share:"Share · QR", act_pdf:"PDF",
+      qr_title:"Scan to view this quote", qr_sub:"The customer scans with their phone camera to reopen this exact simulation on their own device.",
+      qr_copy:"Copy", qr_cap_phone:"Finance quote · {model}", qr_cap_sc:"Samsung Care+ · {model}",
+      toast_link:"Link copied", toast_pdf:"Preparing PDF…", toast_qr:"QR ready to scan",
+      qr_setlink:"Change hosting URL",
+      qr_warn_title:"This QR won't open on a phone yet.",
+      qr_warn_body:"The simulator is running from a local file, so the link points to this device only. Set the public web address in Settings (⚙) so customers can scan it.",
+      set_title:"Share settings",
+      set_sub:"Set the public web address where this simulator is hosted, so QR codes and links open correctly on customers' phones.",
+      set_label:"Public URL of this simulator",
+      set_example:'e.g. <code>https://samsung.liverpool.mx/simulator</code>',
+      set_help:"Enter the https:// address where this page is hosted. QR codes and share links will use it as the base instead of the local file path. Saved on this device only.",
+      set_preview_lbl:"Example share link:",
+      set_status_ok:"Hosting URL set — QR codes will open on customers' phones",
+      set_status_warn:"No hosting URL set — QR codes won't open on a phone yet",
+      set_clear:"Clear", set_save:"Save",
+      set_toast_saved:"Hosting URL saved", set_toast_cleared:"Hosting URL cleared", set_toast_bad:"Enter a valid https:// address",
+      info_close:"Close",
+      info_covers:"What's covered", info_notcov:"Not covered", info_how:"How to claim",
+      info_how_1:"File the claim online at the Samsung Care+ portal (Assurant).",
+      info_how_2:"Describe the incident and pay the applicable service fee (deductible).",
+      info_how_3:"Get an in-warranty repair, or a replacement device shipped — typically within a few business days.",
+      info_foot:"Insurer: Virginia Surety Seguros de México (Assurant). 1 event per year. If the repair costs more than the device value, it is replaced. Coverage, service fees and deductibles follow the Samsung Care+ terms & conditions. Reference figures from Samsung.com MX, checked 2026-09-03.",
+      inc_screen:"Broken or cracked screen", inc_liquid:"Accidental liquid damage",
+      inc_drop:"Drops, knocks and accidental damage", inc_theft:"Theft, with or without violence",
+      inc_expert:"Repairs by Samsung-certified experts with genuine parts", inc_replace:"Full device replacement if a repair costs more",
+      exc_loss:"Simple loss or misplacement (no theft report)", exc_intentional:"Intentional or cosmetic-only damage",
+      exc_nontheft:"Theft not reported to authorities", exc_unauth:"Damage from unauthorized (non-Samsung) repairs",
+      exc_screenonly_theft:"Theft (screen-only plan covers screen incidents, not theft)",
+      exc_screenonly_liquid:"This screen-only plan does not cover liquid or other damage",
+      exc_theft_plain:"Theft or robbery (choose the +Theft plan for that)",
+      q_disc:"*Simulation only. Final terms per Liverpool POS & promo conditions."
+    },
+    es:{
+      title:"Simulador de Financiamiento",
+      sub:"Pago mensual EIP / MSI · Periodo de promoción 2026",
+      tab_smartphone:"Smartphone",
+      tab_scplus:"Samsung Care+",
+      sc_for:"Samsung Care+ para",
+      sc_choose:"Elige un plan de protección",
+      sc_res_kicker:"SAMSUNG CARE+",
+      sc_pay_label:"Opción de pago",
+      sc_bd_plan:"Plan", sc_bd_pay:"Opción de pago", sc_bd_cover:"Periodo de cobertura", sc_bd_price:"Precio Care+",
+      sc_act_copy:"Copiar Care+",
+      sc_st_title:"Argumento de venta Care+ recomendado",
+      sc_sticky_lab:"Samsung Care+",
+      sc_disclaimer:"Los precios de Samsung Care+ son cifras de referencia de Samsung.com MX (consultado 2026-09-03) y pueden cambiar sin previo aviso. La cobertura, el tipo de servicio y el deducible se rigen por los términos de Samsung Care+; aseguradora: Virginia Surety Seguros de México (Assurant). 1 evento por año; si reparar cuesta más, se reemplaza el equipo.",
+      pay_monthly:"Mensual", pay_1y:"Pago único · 1 año", pay_2y:"Pago único · 2 años",
+      pay_sub_monthly:"24 m · incl. garantía ext. 2 años · cancela cuando quieras",
+      pay_sub_1y:"Pago único, cobertura de 1 año",
+      pay_sub_2y:"Pago único, incl. garantía ext. 2 años",
+      u_mo:"/mes", cover_24:"24 meses", cover_12:"12 meses", none_price:"—",
+      none_name:"Sin protección para mi Galaxy",
+      none_desc:"No protection for my Galaxy",
+      prod_dar:"Daño Accidental + Robo", prod_da:"Daño Accidental", prod_pan:"Protección de Pantalla",
+      feat_screen:"Pantalla rota", feat_liquid:"Daños por líquidos", feat_theft:"Robo con o sin violencia",
+      feat_1yr:"1 evento / año", feat_replace:"Reemplazo si reparar cuesta más", feat_expert:"Atención certificada Samsung",
+      sc_pick:"Selecciona un plan arriba para ver las opciones de pago y el precio.",
+      sc_toast_quote:"Cotización Care+ copiada", sc_toast_talk:"Argumento Care+ copiado",
+      scq_title:"Simulación Samsung Care+ — Liverpool",
+      scq_model:"Equipo", scq_plan:"Plan", scq_pay:"Pago", scq_cover:"Cobertura", scq_price:"Precio",
+      scq_disc:"*Solo referencia. Términos finales según condiciones de Samsung Care+ y POS de Liverpool.",
+      lbl_model:"Modelo", grp_s:"Serie Galaxy S26", grp_z:"Serie Galaxy Z",
+      rrp_label:"Precio de venta sugerido (PVP)",
+      lbl_tradein:"Equipo a cuenta", t_no:"No", t_yes:"Sí",
+      tradein_label:"Valor del equipo a cuenta (VR)",
+      tradein_ph:"Ingresa el valor residual",
+      tradein_hint:"Valor residual acreditado por el equipo actual del cliente.",
+      lbl_promo:"Promoción / descuento",
+      promo_ph:"Ingresa el monto de promoción",
+      promo_hint:"Cualquier descuento adicional aplicado al precio.",
+      lbl_term:"Plazo de financiamiento (EIP / MSI)", unit_mo:"m",
+      lbl_msi:"¿Meses sin intereses (MSI)?", msi_yes:"Sí", msi_no:"No",
+      lbl_rate:"Tasa de interés anual", rate_ph:"Ingresa la tasa anual (%)", rate_unit:"% / año",
+      rate_hint:"La tasa anual se divide entre 12 y se aplica a cada pago mensual.",
+      res_kicker:"PAGO MENSUAL",
+      unit_payments:"pagos", unit_months:"meses",
+      tn_interestfree:"sin intereses (MSI)", tn_annual:"interés anual", tn_financed:"financiado (EIP)",
+      bd_rrp:"PVP", bd_trade:"Equipo a cuenta", bd_promo:"Promoción",
+      bd_finance:"Monto a financiar", bd_rate:"Tasa de interés anual",
+      bd_term:"÷ Plazo", bd_total:"Total a pagar",
+      act_copy:"Copiar", act_print:"Imprimir", act_reset:"Reiniciar",
+      st_title:"Argumento de venta recomendado", st_copy:"Copiar",
+      disclaimer:"Todas las cifras son una simulación solo para referencia. La transacción final se rige por el sistema POS de Liverpool, el resultado de la inspección del equipo, las condiciones de la promoción vigente, el método de pago y las políticas de la tienda.",
+      toast_quote:"Cotización copiada", toast_talk:"Argumento copiado", toast_reset:"Reiniciado", toast_fail:"Error al copiar",
+      act_share:"Compartir · QR", act_pdf:"PDF",
+      qr_title:"Escanea para ver esta cotización", qr_sub:"El cliente escanea con la cámara de su celular para reabrir esta misma simulación en su propio equipo.",
+      qr_copy:"Copiar", qr_cap_phone:"Cotización de financiamiento · {model}", qr_cap_sc:"Samsung Care+ · {model}",
+      toast_link:"Enlace copiado", toast_pdf:"Preparando PDF…", toast_qr:"QR listo para escanear",
+      qr_setlink:"Cambiar URL de alojamiento",
+      qr_warn_title:"Este QR aún no se abrirá en un celular.",
+      qr_warn_body:"El simulador se está ejecutando desde un archivo local, así que el enlace apunta solo a este dispositivo. Configura la dirección web pública en Ajustes (⚙) para que los clientes puedan escanearlo.",
+      set_title:"Ajustes de compartir",
+      set_sub:"Configura la dirección web pública donde está alojado este simulador, para que los códigos QR y enlaces se abran correctamente en el celular de los clientes.",
+      set_label:"URL pública de este simulador",
+      set_example:'ej. <code>https://samsung.liverpool.mx/simulator</code>',
+      set_help:"Ingresa la dirección https:// donde está alojada esta página. Los códigos QR y enlaces la usarán como base en lugar de la ruta de archivo local. Se guarda solo en este dispositivo.",
+      set_preview_lbl:"Ejemplo de enlace para compartir:",
+      set_status_ok:"URL configurada — los QR se abrirán en el celular de los clientes",
+      set_status_warn:"Sin URL configurada — los QR aún no se abrirán en un celular",
+      set_clear:"Borrar", set_save:"Guardar",
+      set_toast_saved:"URL guardada", set_toast_cleared:"URL borrada", set_toast_bad:"Ingresa una dirección https:// válida",
+      info_close:"Cerrar",
+      info_covers:"Qué cubre", info_notcov:"No cubre", info_how:"Cómo hacer válida la garantía",
+      info_how_1:"Presenta la reclamación en línea en el portal de Samsung Care+ (Assurant).",
+      info_how_2:"Describe el incidente y paga la cuota de servicio aplicable (deducible).",
+      info_how_3:"Recibe la reparación en garantía, o un equipo de reemplazo enviado — normalmente en pocos días hábiles.",
+      info_foot:"Aseguradora: Virginia Surety Seguros de México (Assurant). 1 evento por año. Si reparar cuesta más que el valor del equipo, se reemplaza. La cobertura, cuotas de servicio y deducibles se rigen por los términos y condiciones de Samsung Care+. Cifras de referencia de Samsung.com MX, consultado 2026-09-03.",
+      inc_screen:"Pantalla rota o estrellada", inc_liquid:"Daños accidentales por líquidos",
+      inc_drop:"Caídas, golpes y daños accidentales", inc_theft:"Robo, con o sin violencia",
+      inc_expert:"Reparaciones por expertos certificados Samsung con piezas originales", inc_replace:"Reemplazo del equipo si reparar cuesta más",
+      exc_loss:"Extravío o pérdida simple (sin denuncia de robo)", exc_intentional:"Daño intencional o solo estético",
+      exc_nontheft:"Robo no denunciado ante las autoridades", exc_unauth:"Daños por reparaciones no autorizadas (fuera de Samsung)",
+      exc_screenonly_theft:"Robo (el plan de solo pantalla cubre incidentes de pantalla, no robo)",
+      exc_screenonly_liquid:"Este plan de solo pantalla no cubre líquidos ni otros daños",
+      exc_theft_plain:"Robo o hurto (elige el plan +Robo para cubrirlo)",
+      q_disc:"*Solo simulación. Términos finales según el POS y las condiciones de promoción de Liverpool."
+    }
+  };
+
+  var state = { lang:"en", tab:"phone", modelIdx:0, rrp:MODELS[0].price, modelName:MODELS[0].name,
+                tradeOn:false, tradein:0, promo:0, term:24, msi:true, rate:0,
+                scPlan:null, scPay:null };
+
+  // ---- Restore state from URL (QR / shared link) ----
+  (function restoreFromURL(){
+    try{
+      var q = new URLSearchParams(location.search);
+      if(![...q.keys()].length) return;
+      if(q.get("lang")==="es"||q.get("lang")==="en") state.lang=q.get("lang");
+      var mi = parseInt(q.get("m"),10);
+      if(!isNaN(mi) && mi>=0 && mi<MODELS.length){ state.modelIdx=mi; state.rrp=MODELS[mi].price; state.modelName=MODELS[mi].name; }
+      if(q.get("ti")){ state.tradeOn=true; state.tradein=parseFloat(q.get("ti"))||0; }
+      if(q.get("pr")) state.promo=parseFloat(q.get("pr"))||0;
+      var tm=parseInt(q.get("t"),10); if([12,18,20,24].indexOf(tm)>=0) state.term=tm;
+      if(q.get("msi")==="0"){ state.msi=false; state.rate=parseFloat(q.get("r"))||0; }
+      var sp=q.get("sp"); if(sp){ state.scPlan=sp; state.scPay=q.get("spy")||null; }
+      if(q.get("tab")==="scplus") state.tab="scplus";
+    }catch(e){}
+  })();
+
+  // ---- Share base URL (settings) ----
+  var SHARE_KEY = "lvp_share_base";
+  function getShareBase(){
+    var saved = "";
+    try{ saved = localStorage.getItem(SHARE_KEY) || ""; }catch(e){}
+    if(saved) return saved;
+    // fall back to current page location (works if hosted; not if opened as file://)
+    return location.origin + location.pathname;
+  }
+  function shareBaseIsUsable(){
+    var b = getShareBase();
+    return /^https?:\/\//i.test(b);   // must be http/https to open on a phone
+  }
+  function normalizeBase(v){
+    v = (v||"").trim();
+    if(!v) return "";
+    if(!/^https?:\/\//i.test(v)) v = "https://" + v;   // assume https if scheme omitted
+    return v.replace(/[?#].*$/, "").replace(/\/+$/, "");   // strip query/hash + trailing slash
+  }
+
+  function buildShareURL(forTab){
+    var base = getShareBase().replace(/[?#].*$/, "").replace(/\/+$/, "");
+    var p = [];
+    p.push("m="+state.modelIdx);
+    p.push("lang="+state.lang);
+    p.push("t="+state.term);
+    if(state.tradeOn && state.tradein>0) p.push("ti="+state.tradein);
+    if(state.promo>0) p.push("pr="+state.promo);
+    if(!state.msi){ p.push("msi=0"); if(state.rate>0) p.push("r="+state.rate); }
+    if((forTab==="scplus") && state.scPlan){ p.push("sp="+state.scPlan); if(state.scPay) p.push("spy="+state.scPay); }
+    p.push("tab="+(forTab||state.tab));
+    return base + "?" + p.join("&");
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  function t(k){ return I18N[state.lang][k]; }
+
+  function parseMoney(v){ if(!v) return 0; var n=parseFloat(String(v).replace(/[^0-9.]/g,"")); return isNaN(n)?0:n; }
+  function fmt(n){ return n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function fmt0(n){ return n.toLocaleString("en-US",{maximumFractionDigits:0}); }
+
+  function compute(){
+    var trade = state.tradeOn ? state.tradein : 0;
+    var finance = state.rrp - trade - state.promo;
+    if(finance < 0) finance = 0;
+    var monthly;
+    var withInterest = (!state.msi && state.rate > 0);
+    if(withInterest){
+      var r = (state.rate/100)/12;
+      monthly = finance * r / (1 - Math.pow(1+r, -state.term));
+    } else {
+      monthly = state.term > 0 ? finance/state.term : 0;
+    }
+    var total = monthly * state.term;
+    return { trade:trade, finance:finance, monthly:monthly, total:total, withInterest:withInterest };
+  }
+
+  function termSuffix(){
+    if(state.msi) return t("tn_interestfree");
+    if(state.rate > 0) return state.rate + "% " + t("tn_annual");
+    return t("tn_financed");
+  }
+
+  function salesTalkText(r){
+    var perDay = r.monthly/30;
+    var name = state.modelName.replace(/\s·\s/g," ");
+    var s=[];
+    if(state.lang==="es"){
+      s.push("El "+name+", tuyo hoy por MXN "+fmt(r.monthly)+" al mes — apenas MXN "+fmt(perDay)+" al día.");
+      if(r.withInterest){
+        s.push(state.term+" meses a "+state.rate+"%. Un pago pequeño en lugar de MXN "+fmt(r.finance)+" de golpe.");
+      } else {
+        s.push(state.term+" meses sin intereses. Cero de golpe, todo en tus manos hoy.");
+      }
+      if(state.tradeOn && state.tradein>0){
+        s.push("Y tu equipo actual ya te descuenta MXN "+fmt(state.tradein)+".");
+      }
+      s.push("¿Te lo activo ahora mismo?");
+    } else {
+      s.push("The "+name+", yours today for MXN "+fmt(r.monthly)+"/month — just MXN "+fmt(perDay)+" a day.");
+      if(r.withInterest){
+        s.push(state.term+" months at "+state.rate+"%. A small payment instead of MXN "+fmt(r.finance)+" up front.");
+      } else {
+        s.push(state.term+" months, zero interest. Nothing up front, everything in your hands today.");
+      }
+      if(state.tradeOn && state.tradein>0){
+        s.push("Plus your trade-in already knocks off MXN "+fmt(state.tradein)+".");
+      }
+      s.push("Shall I set it up right now?");
+    }
+    return s.join(" ");
+  }
+
+  /* ---------- Samsung Care+ logic ---------- */
+  var PROD_META = {
+    dar:{ name:"prod_dar", feats:["feat_screen","feat_liquid","feat_theft","feat_1yr","feat_replace"] },
+    da: { name:"prod_da",  feats:["feat_screen","feat_liquid","feat_1yr","feat_replace"] },
+    pan:{ name:"prod_pan", feats:["feat_screen","feat_expert","feat_1yr"] }
+  };
+
+  function scPlans(){ return SC_PLANS[SC_MAP[state.modelIdx]] || []; }
+  function scFindPlan(id){ var a=scPlans(); for(var i=0;i<a.length;i++){ if(a[i].id===id) return a[i]; } return null; }
+
+  // returns lowest "from" price across payment options for a plan (for the header hint)
+  function scFromPrice(p){
+    var vals=[]; if(p.monthly!=null) vals.push(p.monthly);
+    if(p.oneY!=null) vals.push(p.oneY); if(p.twoY!=null) vals.push(p.twoY);
+    if(!vals.length) return null;
+    return Math.min.apply(null, vals);
+  }
+  function scFromIsMonthly(p){ return p.monthly!=null && p.monthly===scFromPrice(p); }
+
+  // available payment options for a plan, in display order
+  function scPayList(p){
+    var out=[];
+    if(p.monthly!=null) out.push({key:"monthly", price:p.monthly, cover:"cover_24", unit:true});
+    if(p.oneY!=null)    out.push({key:"1y",      price:p.oneY,    cover:"cover_12", unit:false});
+    if(p.twoY!=null)    out.push({key:"2y",      price:p.twoY,    cover:"cover_24", unit:false});
+    return out;
+  }
+  function scPayMeta(key){
+    if(key==="monthly") return {lab:"pay_monthly", sub:"pay_sub_monthly"};
+    if(key==="1y")      return {lab:"pay_1y",      sub:"pay_sub_1y"};
+    return {lab:"pay_2y", sub:"pay_sub_2y"};
+  }
+
+  function buildScOptions(){
+    var host=$("scOpts"); host.innerHTML="";
+    var plans=scPlans();
+    plans.forEach(function(p){
+      var meta=PROD_META[p.id]; if(!meta) return;
+      var from=scFromPrice(p);
+      var btn=document.createElement("button");
+      btn.type="button"; btn.className="scopt"; btn.setAttribute("data-plan",p.id);
+      btn.setAttribute("aria-pressed", state.scPlan===p.id?"true":"false");
+
+      var fromTxt = from!=null ? ("MXN "+fmt0(from)+(scFromIsMonthly(p)?t("u_mo"):"")) : "";
+      var featLis = meta.feats.map(function(f){ return "<li>"+t(f)+"</li>"; }).join("");
+      var payHtml = buildPayHtml(p);
+
+      btn.innerHTML =
+        '<div class="scopt-head">'+
+          '<span class="scopt-name"><svg class="tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="pn">'+t(meta.name)+'</span></span>'+
+          '<span class="scopt-from">'+fromTxt+'</span>'+
+          '<button type="button" class="scopt-info" data-info="'+p.id+'" aria-label="'+t("info_covers")+'">i</button>'+
+        '</div>'+
+        '<ul class="scopt-feat">'+featLis+'</ul>'+
+        '<div class="scpay"><div class="scpay-lbl">'+t("sc_pay_label")+'</div><div class="payrow">'+payHtml+'</div></div>';
+      host.appendChild(btn);
+    });
+
+    // "No protection" option (always present)
+    var none=document.createElement("button");
+    none.type="button"; none.className="scopt none"; none.setAttribute("data-plan","none");
+    none.setAttribute("aria-pressed", state.scPlan==="none"?"true":"false");
+    none.innerHTML=
+      '<div class="scopt-head">'+
+        '<span class="scopt-name"><span class="scopt-radio"></span><span class="pn">'+t("none_name")+'</span></span>'+
+      '</div>';
+    host.appendChild(none);
+
+    wireScOptions();
+  }
+
+  function buildPayHtml(p){
+    return scPayList(p).map(function(o){
+      var m=scPayMeta(o.key);
+      var pressed = (state.scPlan===p.id && state.scPay===o.key)?"true":"false";
+      var unit = o.unit ? '<span class="u">'+t("u_mo")+'</span>' : '';
+      return '<button type="button" class="payopt" data-plan="'+p.id+'" data-pay="'+o.key+'" aria-pressed="'+pressed+'">'+
+               '<span><span class="pay-k">'+t(m.lab)+'</span><span class="pay-sub">'+t(m.sub)+'</span></span>'+
+               '<span class="pay-v">MXN '+fmt0(o.price)+unit+'</span>'+
+             '</button>';
+    }).join("");
+  }
+
+  function wireScOptions(){
+    Array.prototype.forEach.call($("scOpts").querySelectorAll(".scopt"), function(card){
+      card.addEventListener("click", function(e){
+        if(e.target.closest(".payopt")) return; // handled separately
+        if(e.target.closest(".scopt-info")) return; // info handled separately
+        var id=this.getAttribute("data-plan");
+        if(state.scPlan===id && id!=="none"){ return; }
+        state.scPlan=id;
+        if(id==="none"){ state.scPay=null; }
+        else {
+          var p=scFindPlan(id); var list=p?scPayList(p):[];
+          // keep current pay if still valid, else default to first
+          var ok=false; for(var i=0;i<list.length;i++){ if(list[i].key===state.scPay) ok=true; }
+          if(!ok) state.scPay = list.length?list[0].key:null;
+        }
+        buildScOptions(); renderSc();
+      });
+    });
+    Array.prototype.forEach.call($("scOpts").querySelectorAll(".scopt-info"), function(b){
+      b.addEventListener("click", function(e){
+        e.stopPropagation(); e.preventDefault();
+        openInfo(this.getAttribute("data-info"));
+      });
+    });
+    Array.prototype.forEach.call($("scOpts").querySelectorAll(".payopt"), function(b){
+      b.addEventListener("click", function(e){
+        e.stopPropagation();
+        state.scPlan=this.getAttribute("data-plan");
+        state.scPay=this.getAttribute("data-pay");
+        buildScOptions(); renderSc();
+      });
+    });
+  }
+
+  function scSelected(){
+    if(!state.scPlan || state.scPlan==="none") return null;
+    var p=scFindPlan(state.scPlan); if(!p) return null;
+    var list=scPayList(p);
+    var chosen=null; for(var i=0;i<list.length;i++){ if(list[i].key===state.scPay) chosen=list[i]; }
+    if(!chosen && list.length) chosen=list[0];
+    return chosen?{plan:p, pay:chosen}:null;
+  }
+
+  function scSalesTalk(){
+    var es=state.lang==="es";
+    var dev=state.modelName.replace(/\s·\s/g," ");
+    if(state.scPlan==="none" || !state.scPlan){
+      return es
+        ? "El "+dev+" es una inversión importante. Con Samsung Care+ tendrías tranquilidad total ante una pantalla rota, un derrame o un robo — sin Care+, cualquier accidente sale de tu bolsillo. ¿Le damos esa protección hoy mismo?"
+        : "The "+dev+" is a big investment. With Samsung Care+ you'd have complete peace of mind against a cracked screen, a spill or theft — without it, any accident comes straight out of pocket. Shall we protect it today?";
+    }
+    var sel=scSelected(); if(!sel) return "";
+    var prodKey=PROD_META[sel.plan.id].name;
+    var prod=t(prodKey);
+    var priceTxt, perDay="";
+    if(sel.pay.key==="monthly"){
+      priceTxt="MXN "+fmt0(sel.pay.price)+t("u_mo");
+      perDay = "MXN "+fmt(sel.pay.price/30);
+    } else {
+      priceTxt="MXN "+fmt0(sel.pay.price);
+      var months = sel.pay.cover==="cover_24"?24:12;
+      perDay = "MXN "+fmt(sel.pay.price/(months*30));
+    }
+    var s=[];
+    if(es){
+      s.push("Protege tu "+dev+" con Samsung Care+ "+prod+" por "+priceTxt+".");
+      if(sel.plan.id==="dar") s.push("Cubre pantalla rota, daños por líquidos e incluso robo con o sin violencia — un solo evento al año, y si reparar cuesta más, te reemplazan el equipo por uno nuevo.");
+      else if(sel.plan.id==="da") s.push("Cubre pantalla rota y daños por líquidos; si reparar cuesta más, te reemplazan el equipo por uno nuevo.");
+      else s.push("Protege lo más delicado, la pantalla, con atención certificada por expertos Samsung.");
+      s.push("Son apenas unos "+perDay+" al día por la tranquilidad de saber que, pase lo que pase, tu Galaxy está cubierto por técnicos certificados. Peace of mind hoy, sin sorpresas mañana.");
+    } else {
+      s.push("Protect your "+dev+" with Samsung Care+ "+prod+" for "+priceTxt+".");
+      if(sel.plan.id==="dar") s.push("It covers a broken screen, liquid damage and even theft with or without violence — one event a year, and if the repair costs more, they replace your device with a new one.");
+      else if(sel.plan.id==="da") s.push("It covers a broken screen and liquid damage; if the repair costs more, they replace your device with a new one.");
+      else s.push("It protects the most fragile part — the screen — with Samsung-certified expert care.");
+      s.push("That's just about "+perDay+" a day for the peace of mind of knowing that, whatever happens, your Galaxy is covered by certified experts. Peace of mind today, no surprises tomorrow.");
+    }
+    return s.join(" ");
+  }
+
+  function renderSc(){
+    $("scModelName").textContent = state.modelName;
+    $("stickyScModel").textContent = state.modelName;
+    var note=$("scNote"); note.textContent="";
+
+    var sel=scSelected();
+    if(state.scPlan==="none"){
+      $("scAmount").textContent="0.00"; $("scAmountUnit").textContent="";
+      $("scPlanLine").textContent=t("none_name");
+      $("scbPlan").textContent=t("none_name");
+      $("scbPay").textContent="—"; $("scbCover").textContent="—"; $("scbPrice").textContent="MXN 0.00";
+      $("stickyScPrice").textContent="0"; $("stickyScUnit").textContent="";
+      $("stickyScPlan").textContent=t("none_desc");
+    } else if(sel){
+      var prod=t(PROD_META[sel.plan.id].name);
+      var m=scPayMeta(sel.pay.key);
+      var isMonthly = sel.pay.key==="monthly";
+      $("scAmount").textContent=fmt(sel.pay.price);
+      $("scAmountUnit").textContent = isMonthly ? t("u_mo") : "";
+      $("scPlanLine").textContent = prod+" · "+t(m.lab);
+      $("scbPlan").textContent=prod;
+      $("scbPay").textContent=t(m.lab);
+      $("scbCover").textContent=t(sel.pay.cover);
+      $("scbPrice").textContent="MXN "+fmt(sel.pay.price)+(isMonthly?t("u_mo"):"");
+      $("stickyScPrice").textContent=fmt0(sel.pay.price);
+      $("stickyScUnit").textContent = isMonthly ? t("u_mo") : "";
+      $("stickyScPlan").textContent = prod;
+    } else {
+      $("scAmount").textContent="—"; $("scAmountUnit").textContent="";
+      $("scPlanLine").textContent="—";
+      $("scbPlan").textContent="—"; $("scbPay").textContent="—"; $("scbCover").textContent="—"; $("scbPrice").textContent="—";
+      $("stickyScPrice").textContent="—"; $("stickyScUnit").textContent="";
+      $("stickyScPlan").textContent="—";
+      note.textContent=t("sc_pick");
+    }
+    $("scSalesTalk").textContent=scSalesTalk();
+  }
+
+  function scQuoteText(){
+    var sel=scSelected();
+    var lines=[ t("scq_title"), t("scq_model")+": "+state.modelName ];
+    if(state.scPlan==="none" || !sel){
+      lines.push(t("scq_plan")+": "+t("none_name"));
+    } else {
+      var isMonthly=sel.pay.key==="monthly";
+      lines.push(t("scq_plan")+": "+t(PROD_META[sel.plan.id].name));
+      lines.push(t("scq_pay")+": "+t(scPayMeta(sel.pay.key).lab));
+      lines.push(t("scq_cover")+": "+t(sel.pay.cover));
+      lines.push(t("scq_price")+": MXN "+fmt(sel.pay.price)+(isMonthly?t("u_mo"):""));
+    }
+    lines.push(""); lines.push(t("scq_disc"));
+    return lines.join("\n");
+  }
+
+  function switchTab(tab){
+    state.tab=tab;
+    document.body.classList.toggle("tab-scplus", tab==="scplus");
+    $("tabPhone").setAttribute("aria-selected", tab==="phone"?"true":"false");
+    $("tabSc").setAttribute("aria-selected", tab==="scplus"?"true":"false");
+    $("stickyPhone").style.display = tab==="phone"?"flex":"none";
+    $("stickySc").style.display = tab==="scplus"?"flex":"none";
+    if(tab==="scplus"){ buildScOptions(); renderSc(); }
+  }
+
+  /* ---------- Share / QR modal ---------- */
+  function openShare(forTab){
+    var url = buildShareURL(forTab);
+    var holder = $("qrHolder");
+    holder.innerHTML = "";
+    try{
+      var qr = qrcode(0, "M");         // type 0 = auto-fit, error correction M
+      qr.addData(url);
+      qr.make();
+      holder.innerHTML = qr.createSvgTag({ cellSize:5, margin:0, scalable:true });
+      var svg = holder.querySelector("svg");
+      if(svg){ svg.removeAttribute("width"); svg.removeAttribute("height"); }
+    }catch(e){
+      holder.innerHTML = '<div style="padding:40px 20px;color:#6B7280;font-size:13px;text-align:center;">QR unavailable</div>';
+    }
+    var cap = (forTab==="scplus") ? t("qr_cap_sc") : t("qr_cap_phone");
+    $("qrCap").textContent = cap.replace("{model}", state.modelName);
+    $("qrLink").value = url;
+    // Warn if the base URL won't open on a phone (file:// or unset)
+    var warn = $("qrWarn");
+    if(!shareBaseIsUsable()){
+      warn.innerHTML = "<b>"+t("qr_warn_title")+"</b><br>"+t("qr_warn_body");
+      warn.style.display = "block";
+    } else {
+      warn.style.display = "none";
+    }
+    $("shareModal").classList.add("show");
+    toast(t("toast_qr"));
+  }
+  function closeShare(){ $("shareModal").classList.remove("show"); }
+
+  /* ---------- Share settings (hosting URL) ---------- */
+  function openSettings(){
+    var saved = "";
+    try{ saved = localStorage.getItem(SHARE_KEY) || ""; }catch(e){}
+    $("setUrl").value = saved;
+    $("setUrl").classList.remove("bad");
+    renderSetStatus(); updateSetPreview();
+    $("setModal").classList.add("show");
+    setTimeout(function(){ try{ $("setUrl").focus(); }catch(e){} }, 60);
+  }
+  function closeSettings(){ $("setModal").classList.remove("show"); }
+  function renderSetStatus(){
+    var el = $("setStatus"); if(!el) return;
+    var usable = shareBaseIsUsable();
+    var saved=""; try{ saved=localStorage.getItem(SHARE_KEY)||""; }catch(e){}
+    if(saved && usable){
+      el.innerHTML = '<span class="set-status ok">● '+t("set_status_ok")+'</span>';
+    } else {
+      el.innerHTML = '<span class="set-status warn">● '+t("set_status_warn")+'</span>';
+    }
+  }
+  function updateSetPreview(){
+    var norm = normalizeBase($("setUrl").value);
+    var base = norm || getShareBase();
+    $("setPreview").innerHTML = t("set_preview_lbl")+"<br><b>"+base+"?m=0&lang="+state.lang+"&tab=phone</b>";
+  }
+  function saveSettings(){
+    var raw = $("setUrl").value.trim();
+    if(!raw){ clearSettings(); return; }
+    var norm = normalizeBase(raw);
+    if(!/^https?:\/\/[^\s.]+\.[^\s]+/i.test(norm)){
+      $("setUrl").classList.add("bad");
+      toast(t("set_toast_bad"));
+      return;
+    }
+    try{ localStorage.setItem(SHARE_KEY, norm); }catch(e){}
+    $("setUrl").value = norm;
+    $("setUrl").classList.remove("bad");
+    updateGearBadge(); renderSetStatus(); updateSetPreview();
+    toast(t("set_toast_saved"));
+    setTimeout(closeSettings, 500);
+  }
+  function clearSettings(){
+    try{ localStorage.removeItem(SHARE_KEY); }catch(e){}
+    $("setUrl").value = "";
+    $("setUrl").classList.remove("bad");
+    updateGearBadge(); renderSetStatus(); updateSetPreview();
+    toast(t("set_toast_cleared"));
+  }
+  function updateGearBadge(){
+    // red dot on the gear when no usable hosting URL is set
+    $("gearBtn").classList.toggle("unset", !shareBaseIsUsable());
+  }
+
+  /* ---------- PDF (print-to-PDF of the active panel) ---------- */
+  function makePDF(){
+    // Reuse the browser's print pipeline (Save as PDF). Print CSS already isolates the active panel.
+    toast(t("toast_pdf"));
+    setTimeout(function(){ window.print(); }, 250);
+  }
+
+  /* ---------- Care+ info modal ---------- */
+  var INFO_COVERS = {
+    dar:["inc_screen","inc_liquid","inc_drop","inc_theft","inc_replace","inc_expert"],
+    da: ["inc_screen","inc_liquid","inc_drop","inc_replace","inc_expert"],
+    pan:["inc_screen","inc_expert"]
+  };
+  var INFO_EXCL = {
+    dar:["exc_loss","exc_intentional","exc_nontheft","exc_unauth"],
+    da: ["exc_theft","exc_loss","exc_intentional","exc_unauth"],
+    pan:["exc_screenonly_liquid","exc_screenonly_theft","exc_unauth"]
+  };
+  // note: da excludes theft -> reuse a theft-exclusion label
+  var EXC_LABEL = { exc_theft:"exc_theft_plain" };
+
+  function openInfo(planId){
+    var meta = PROD_META[planId]; if(!meta) return;
+    $("infoTitle").textContent = t(meta.name);
+    var p = scFindPlan(planId);
+    var priceTxt = "";
+    if(p){
+      var from = scFromPrice(p);
+      if(from!=null) priceTxt = (state.lang==="es"?"Desde ":"From ")+"MXN "+fmt0(from)+(scFromIsMonthly(p)?t("u_mo"):"");
+    }
+    $("infoPrice").innerHTML = '<span class="info-price">'+priceTxt+'</span>';
+
+    var covers = (INFO_COVERS[planId]||[]).map(function(k){ return "<li>"+t(k)+"</li>"; }).join("");
+    var excl = (INFO_EXCL[planId]||[]).map(function(k){ var kk=EXC_LABEL[k]||k; return "<li>"+t(kk)+"</li>"; }).join("");
+
+    $("infoBody").innerHTML =
+      '<div class="info-sec"><h4 class="ok">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'+t("info_covers")+'</h4>'+
+        '<ul class="info-list ok">'+covers+'</ul></div>'+
+      '<div class="info-sec"><h4 class="no">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'+t("info_notcov")+'</h4>'+
+        '<ul class="info-list no">'+excl+'</ul></div>'+
+      '<div class="info-sec"><h4 class="how">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12c.7.7 1 1.5 1 2h6c0-.5.3-1.3 1-2a7 7 0 0 0-4-12z"/></svg>'+t("info_how")+'</h4>'+
+        '<ol class="info-list how"><li>'+t("info_how_1")+'</li><li>'+t("info_how_2")+'</li><li>'+t("info_how_3")+'</li></ol></div>'+
+      '<p class="info-foot">'+t("info_foot")+'</p>';
+
+    $("infoModal").classList.add("show");
+  }
+  function closeInfo(){ $("infoModal").classList.remove("show"); }
+
+  function render(){
+    var r = compute();
+    var mUnit = t("unit_months");
+
+    $("monthly").textContent = fmt(r.monthly);
+    $("stickyMonthly").textContent = fmt(r.monthly);
+    $("stickyTerm").textContent = state.term + " " + mUnit;
+    $("stickyModel").textContent = state.modelName;
+    $("resultModel").textContent = state.modelName;
+    $("termLine").textContent = state.term + " " + t("unit_payments") + " · " + termSuffix();
+    $("salesTalk").textContent = salesTalkText(r);
+
+    $("bRRP").textContent    = "MXN " + fmt(state.rrp);
+    $("bTrade").textContent  = "– MXN " + fmt(state.tradeOn ? state.tradein : 0);
+    $("bPromo").textContent  = "– MXN " + fmt(state.promo);
+    $("bFinance").textContent= "MXN " + fmt(r.finance);
+    $("bTerm").textContent   = state.term + " " + mUnit;
+    $("bTradeRow").style.display = state.tradeOn ? "flex" : "none";
+
+    var showInt = r.withInterest;
+    $("bRateRow").style.display  = showInt ? "flex" : "none";
+    $("bTotalRow").style.display = showInt ? "flex" : "none";
+    if(showInt){ $("bRate").textContent = state.rate + "%"; $("bTotal").textContent = "MXN " + fmt(r.total); }
+
+    $("rrpHint").textContent = "MXN " + fmt0(state.rrp);
+  }
+
+  function applyLang(){
+    document.documentElement.lang = state.lang;
+    var els = document.querySelectorAll("[data-i18n]");
+    for(var i=0;i<els.length;i++){ var k=els[i].getAttribute("data-i18n"); if(I18N[state.lang][k]!=null) els[i].textContent = I18N[state.lang][k]; }
+    var phs = document.querySelectorAll("[data-i18n-ph]");
+    for(var j=0;j<phs.length;j++){ var pk=phs[j].getAttribute("data-i18n-ph"); if(I18N[state.lang][pk]!=null) phs[j].setAttribute("placeholder", I18N[state.lang][pk]); }
+    var hs = document.querySelectorAll("[data-i18n-html]");
+    for(var h=0;h<hs.length;h++){ var hk=hs[h].getAttribute("data-i18n-html"); if(I18N[state.lang][hk]!=null) hs[h].innerHTML = I18N[state.lang][hk]; }
+    var ogs = document.querySelectorAll("#model optgroup");
+    if(ogs[0]) ogs[0].label = t("grp_s");
+    if(ogs[1]) ogs[1].label = t("grp_z");
+    Array.prototype.forEach.call($("termToggle").children, function(b){ b.textContent = b.getAttribute("data-term") + " " + t("unit_mo"); });
+    Array.prototype.forEach.call($("langToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-lang")===state.lang ? "true":"false"); });
+    render();
+    buildScOptions(); renderSc();
+  }
+
+  // Language toggle
+  Array.prototype.forEach.call($("langToggle").children, function(btn){
+    btn.addEventListener("click", function(){ state.lang = this.getAttribute("data-lang"); applyLang(); });
+  });
+
+  // Model
+  $("model").addEventListener("change", function(){
+    var i = parseInt(this.value,10);
+    state.modelIdx=i; state.rrp=MODELS[i].price; state.modelName=MODELS[i].name;
+    // validate current SC+ selection against new model's available plans
+    if(state.scPlan && state.scPlan!=="none"){
+      var p=scFindPlan(state.scPlan);
+      if(!p){ state.scPlan=null; state.scPay=null; }
+      else {
+        var list=scPayList(p), ok=false;
+        for(var k=0;k<list.length;k++){ if(list[k].key===state.scPay) ok=true; }
+        if(!ok) state.scPay = list.length?list[0].key:null;
+      }
+    }
+    render();
+    if(state.tab==="scplus"){ buildScOptions(); renderSc(); }
+  });
+
+  // Tabs
+  $("tabPhone").addEventListener("click", function(){ switchTab("phone"); });
+  $("tabSc").addEventListener("click", function(){ switchTab("scplus"); });
+
+  // SC+ copy / print / share / pdf
+  $("scCopyBtn").addEventListener("click", function(){ doCopy(scQuoteText(), t("sc_toast_quote")); });
+  $("scCopyTalkBtn").addEventListener("click", function(){ doCopy(scSalesTalk(), t("sc_toast_talk")); });
+  $("scPrintBtn").addEventListener("click", function(){ window.print(); });
+  $("scShareBtn").addEventListener("click", function(){ openShare("scplus"); });
+  $("scPdfBtn").addEventListener("click", makePDF);
+
+  // Phone share / pdf
+  $("shareBtn").addEventListener("click", function(){ openShare("phone"); });
+  $("pdfBtn").addEventListener("click", makePDF);
+
+  // Modal close (buttons, backdrop, ESC)
+  $("shareClose").addEventListener("click", closeShare);
+  $("infoClose").addEventListener("click", closeInfo);
+  $("shareModal").addEventListener("click", function(e){ if(e.target===this) closeShare(); });
+  $("infoModal").addEventListener("click", function(e){ if(e.target===this) closeInfo(); });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape"){ closeShare(); closeInfo(); closeSettings(); } });
+  $("qrCopyLink").addEventListener("click", function(){ doCopy($("qrLink").value, t("toast_link")); });
+
+  // Settings (hosting URL)
+  $("gearBtn").addEventListener("click", openSettings);
+  $("setClose").addEventListener("click", closeSettings);
+  $("setModal").addEventListener("click", function(e){ if(e.target===this) closeSettings(); });
+  $("setSave").addEventListener("click", saveSettings);
+  $("setClear").addEventListener("click", clearSettings);
+  $("setUrl").addEventListener("input", function(){ this.classList.remove("bad"); updateSetPreview(); });
+  $("setUrl").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); saveSettings(); } });
+  // From the QR sheet: jump to settings
+  $("qrSetLink").addEventListener("click", function(){ closeShare(); openSettings(); });
+
+  // Trade-in toggle
+  Array.prototype.forEach.call($("tradeToggle").children, function(btn){
+    btn.addEventListener("click", function(){
+      var on = this.getAttribute("data-trade")==="on"; state.tradeOn = on;
+      Array.prototype.forEach.call($("tradeToggle").children, function(b){ b.setAttribute("aria-pressed",(b.getAttribute("data-trade")==="on")===on?"true":"false"); });
+      $("tradeinField").classList.toggle("show", on);
+      if(!on){ $("tradein").value=""; state.tradein=0; }
+      render();
+    });
+  });
+  $("tradein").addEventListener("input", function(){ state.tradein = parseMoney(this.value); render(); });
+  $("promo").addEventListener("input", function(){ state.promo = parseMoney(this.value); render(); });
+
+  // Term toggle
+  Array.prototype.forEach.call($("termToggle").children, function(btn){
+    btn.addEventListener("click", function(){
+      state.term = parseInt(this.getAttribute("data-term"),10);
+      Array.prototype.forEach.call($("termToggle").children, function(b){ b.setAttribute("aria-pressed", b===btn?"true":"false"); });
+      render();
+    });
+  });
+
+  // MSI toggle
+  Array.prototype.forEach.call($("msiToggle").children, function(btn){
+    btn.addEventListener("click", function(){
+      var yes = this.getAttribute("data-msi")==="yes"; state.msi = yes;
+      Array.prototype.forEach.call($("msiToggle").children, function(b){ b.setAttribute("aria-pressed",(b.getAttribute("data-msi")==="yes")===yes?"true":"false"); });
+      $("rateField").classList.toggle("show", !yes);
+      if(yes){ $("rate").value=""; state.rate=0; }
+      render();
+    });
+  });
+  $("rate").addEventListener("input", function(){ state.rate = parseMoney(this.value); render(); });
+
+  // Toast
+  var toastTimer;
+  function toast(msg){ var el=$("toast"); el.textContent=msg; el.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(function(){ el.classList.remove("show"); },1600); }
+
+  // Copy quote
+  $("copyBtn").addEventListener("click", function(){
+    var r = compute();
+    var lines = [ t("q_title"), t("q_model")+": "+state.modelName, t("q_rrp")+": MXN "+fmt(state.rrp) ];
+    if(state.tradeOn) lines.push(t("q_trade")+": – MXN "+fmt(state.tradein));
+    lines.push(t("q_promo")+": – MXN "+fmt(state.promo));
+    lines.push(t("q_finance")+": MXN "+fmt(r.finance));
+    lines.push(t("q_term")+": "+state.term+" "+t("unit_months")+" (EIP/MSI)");
+    if(r.withInterest){
+      lines.push(t("q_rate")+": "+state.rate+"%");
+      lines.push(t("q_total")+": MXN "+fmt(r.total));
+    } else {
+      lines.push("MSI: "+t("q_msi_free"));
+    }
+    lines.push(t("q_monthly")+": MXN "+fmt(r.monthly));
+    lines.push(""); lines.push(t("q_disc"));
+    doCopy(lines.join("\n"), t("toast_quote"));
+  });
+
+  // Copy sales talk
+  $("copyTalkBtn").addEventListener("click", function(){ doCopy(salesTalkText(compute()), t("toast_talk")); });
+
+  function doCopy(text, okMsg){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ toast(okMsg); }, function(){ fallbackCopy(text, okMsg); });
+    } else { fallbackCopy(text, okMsg); }
+  }
+  function fallbackCopy(text, okMsg){
+    var ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try{ document.execCommand("copy"); toast(okMsg); } catch(e){ toast(t("toast_fail")); }
+    document.body.removeChild(ta);
+  }
+
+  // Print
+  $("printBtn").addEventListener("click", function(){ window.print(); });
+
+  // Reset
+  $("resetBtn").addEventListener("click", function(){
+    var lang = state.lang, tab = state.tab;
+    state = { lang:lang, tab:tab, modelIdx:0, rrp:MODELS[0].price, modelName:MODELS[0].name, tradeOn:false, tradein:0, promo:0, term:24, msi:true, rate:0, scPlan:null, scPay:null };
+    $("model").value="0"; $("tradein").value=""; $("promo").value=""; $("rate").value="";
+    Array.prototype.forEach.call($("tradeToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-trade")==="off"?"true":"false"); });
+    $("tradeinField").classList.remove("show");
+    Array.prototype.forEach.call($("termToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-term")==="24"?"true":"false"); });
+    Array.prototype.forEach.call($("msiToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-msi")==="yes"?"true":"false"); });
+    $("rateField").classList.remove("show");
+    render(); buildScOptions(); renderSc(); toast(t("toast_reset"));
+  });
+
+  // ---- Sync all controls to (possibly URL-restored) state ----
+  function syncControlsToState(){
+    $("model").value = String(state.modelIdx);
+    // trade-in
+    $("tradein").value = state.tradeOn && state.tradein ? String(state.tradein) : "";
+    Array.prototype.forEach.call($("tradeToggle").children, function(b){ b.setAttribute("aria-pressed",(b.getAttribute("data-trade")==="on")===state.tradeOn?"true":"false"); });
+    $("tradeinField").classList.toggle("show", state.tradeOn);
+    // promo
+    $("promo").value = state.promo ? String(state.promo) : "";
+    // term
+    Array.prototype.forEach.call($("termToggle").children, function(b){ b.setAttribute("aria-pressed", parseInt(b.getAttribute("data-term"),10)===state.term?"true":"false"); });
+    // msi / rate
+    Array.prototype.forEach.call($("msiToggle").children, function(b){ b.setAttribute("aria-pressed",(b.getAttribute("data-msi")==="yes")===state.msi?"true":"false"); });
+    $("rateField").classList.toggle("show", !state.msi);
+    $("rate").value = (!state.msi && state.rate) ? String(state.rate) : "";
+  }
+
+  syncControlsToState();
+  applyLang();
+  switchTab(state.tab || "phone");
+  updateGearBadge();
+})();
+</script>
+</body>
+</html>
