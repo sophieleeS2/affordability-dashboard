@@ -148,6 +148,19 @@
   .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand);}
   .btn:active{transform:scale(.98);}
 
+  /* Price ladder + total strip */
+  .steps{display:flex;gap:5px;margin:0 0 12px;}
+  .steps i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.16);transition:background .25s ease;}
+  .steps i.on{background:var(--brand);}
+  .result .kicker{transition:color .2s ease;}
+  .result .kicker.live{color:var(--brand);}
+  .cutline{margin:6px 0 0;min-height:19px;font-size:14px;font-weight:700;color:var(--brand);font-variant-numeric:tabular-nums;}
+  .totalstrip{background:var(--brand);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .totalstrip .tl{font-size:13px;font-weight:700;line-height:1.25;}
+  .totalstrip .tl small{display:block;font-size:11.5px;font-weight:600;color:rgba(255,255,255,.78);margin-top:2px;}
+  .totalstrip .tv{font-size:23px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .totalstrip .tv .cursym{font-size:13px;font-weight:700;margin-right:4px;vertical-align:3px;}
+
   .salestalk{border-left:4px solid var(--brand);}
   .st-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;}
   .st-title{font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--brand);display:flex;align-items:center;gap:7px;}
@@ -178,6 +191,10 @@
     .breakdown{background:#fff;}
     .row .k,.row .v,.row .v.minus{color:#000 !important;}
     .row{border-color:#ddd;}
+    .steps{display:none;}
+    .cutline{color:#000;}
+    .totalstrip{background:#fff;color:#000;border-top:1.5px solid #000;}
+    .totalstrip .tl small{color:#444;}
     .salestalk{border-left:4px solid #000;} .st-title{color:#000;}
     .disclaimer{color:#555;}
     .scopt{border:1px solid #bbb;break-inside:avoid;} .scopt-from{color:#000;}
@@ -307,20 +324,29 @@
         <div class="selectwrap">
           <select id="model">
             <optgroup label="Galaxy S26 Series">
-              <option value="0" selected>Galaxy S26 Ultra · 512GB</option>
-              <option value="1">Galaxy S26 Ultra · 1TB</option>
+              <option value="0" selected>Galaxy S26 Ultra · 1TB</option>
+              <option value="1">Galaxy S26 Ultra · 512GB</option>
               <option value="2">Galaxy S26+ · 512GB</option>
               <option value="3">Galaxy S26 · 256GB</option>
+              <option value="4">Galaxy S26 FE · 256GB</option>
             </optgroup>
             <optgroup label="Galaxy Z Series">
-              <option value="4">Galaxy Z Fold8 Ultra · 1TB</option>
-              <option value="5">Galaxy Z Fold8 Ultra · 512GB</option>
-              <option value="6">Galaxy Z Fold8 · 512GB</option>
-              <option value="7">Galaxy Z Flip8 · 512GB</option>
+              <option value="5">Galaxy Z Fold8 Ultra · 1TB</option>
+              <option value="6">Galaxy Z Fold8 Ultra · 512GB</option>
+              <option value="7">Galaxy Z Fold8 · 512GB</option>
+              <option value="8">Galaxy Z Flip8 · 512GB</option>
+            </optgroup>
+            <optgroup label="Galaxy A Series">
+              <option value="9">Galaxy A57 5G · 256GB</option>
+              <option value="10">Galaxy A37 5G · 128GB</option>
+              <option value="11">Galaxy A27 5G · 128GB</option>
+              <option value="12">Galaxy A18 LTE · 128GB</option>
+              <option value="13">Galaxy A08 LTE · 128GB</option>
+              <option value="14">Galaxy A08 LTE · 64GB</option>
             </optgroup>
           </select>
         </div>
-        <div class="rrp-hint"><span data-i18n="rrp_label">Recommended retail price (RRP)</span><b id="rrpHint">MXN 37,999</b></div>
+        <div class="rrp-hint"><span data-i18n="rrp_label">Recommended retail price (RRP)</span><b id="rrpHint">MXN 48,999</b></div>
       </div>
 
       <div class="field">
@@ -354,7 +380,7 @@
           <button type="button" data-term="12" aria-pressed="false">12 mo</button>
           <button type="button" data-term="18" aria-pressed="false">18 mo</button>
           <button type="button" data-term="20" aria-pressed="false">20 mo</button>
-          <button type="button" data-term="24" aria-pressed="true">24 mo</button>
+          <button type="button" data-term="24" aria-pressed="false">24 mo</button>
         </div>
       </div>
 
@@ -377,10 +403,12 @@
 
     <div class="card result">
       <div class="top">
-        <p class="kicker" data-i18n="res_kicker">MONTHLY PAYMENT</p>
-        <p class="amount"><span class="cursym">MXN</span><span id="monthly">1,583.29</span></p>
-        <p class="term-note"><span id="resultModel">Galaxy S26 Ultra · 512GB</span></p>
-        <p class="term-note" id="termLine">24 payments · interest-free (MSI)</p>
+        <div class="steps" id="steps"><i></i><i></i><i></i><i></i></div>
+        <p class="kicker" id="stageLab" data-i18n="res_kicker">MONTHLY PAYMENT</p>
+        <p class="amount"><span class="cursym">MXN</span><span id="monthly">—</span></p>
+        <p class="cutline" id="stageCut"></p>
+        <p class="term-note"><span id="resultModel">Galaxy S26 Ultra · 1TB</span></p>
+        <p class="term-note" id="termLine">—</p>
       </div>
       <div class="accentbar"></div>
       <div class="breakdown" id="breakdown">
@@ -389,8 +417,11 @@
         <div class="row"><span class="k" data-i18n="bd_promo">Promotion</span><span class="v minus" id="bPromo">– MXN 0.00</span></div>
         <div class="row total"><span class="k" data-i18n="bd_finance">Amount to finance</span><span class="v" id="bFinance">MXN 37,999.00</span></div>
         <div class="row" id="bRateRow" style="display:none;"><span class="k" data-i18n="bd_rate">Annual interest rate</span><span class="v" id="bRate">0%</span></div>
-        <div class="row"><span class="k" data-i18n="bd_term">÷ Term</span><span class="v" id="bTerm">24 months</span></div>
-        <div class="row" id="bTotalRow" style="display:none;"><span class="k" data-i18n="bd_total">Total to pay</span><span class="v" id="bTotal">MXN 0.00</span></div>
+        <div class="row"><span class="k" data-i18n="bd_term">÷ Term</span><span class="v" id="bTerm">—</span></div>
+      </div>
+      <div class="totalstrip">
+        <span class="tl"><span data-i18n="bd_total">Total price</span><small id="totalNote"></small></span>
+        <span class="tv"><span class="cursym">MXN</span><span id="bTotal">—</span></span>
       </div>
     </div>
 
@@ -497,8 +528,8 @@
 </div>
 
 <div class="sticky" id="stickyPhone">
-  <div><div class="lab" data-i18n="res_kicker">Monthly payment</div><div class="big"><span class="cursym">MXN</span><span id="stickyMonthly">1,583.29</span></div></div>
-  <div class="rt"><div class="lab" id="stickyModel">Galaxy S26 Ultra · 512GB</div><div class="term" id="stickyTerm">24 months</div></div>
+  <div><div class="lab" data-i18n="res_kicker">Monthly payment</div><div class="big"><span class="cursym">MXN</span><span id="stickyMonthly">—</span></div></div>
+  <div class="rt"><div class="lab" id="stickyModel">Galaxy S26 Ultra · 512GB</div><div class="term" id="stickyTerm">—</div></div>
 </div>
 <div class="sticky" id="stickySc" style="display:none;">
   <div><div class="lab" data-i18n="sc_sticky_lab">Samsung Care+</div><div class="big"><span class="cursym">MXN</span><span id="stickyScPrice">—</span><span id="stickyScUnit" style="font-size:13px;color:#C7CBD6;margin-left:4px;"></span></div></div>
@@ -2876,14 +2907,21 @@ var qrcode = function() {
   "use strict";
 
   var MODELS = [
-    {name:"Galaxy S26 Ultra · 512GB",    price:37999},
-    {name:"Galaxy S26 Ultra · 1TB",      price:45499},
-    {name:"Galaxy S26+ · 512GB",         price:33499},
-    {name:"Galaxy S26 · 256GB",          price:22499},
+    {name:"Galaxy S26 Ultra · 1TB",      price:48999},
+    {name:"Galaxy S26 Ultra · 512GB",    price:38999},
+    {name:"Galaxy S26+ · 512GB",         price:34999},
+    {name:"Galaxy S26 · 256GB",          price:24499},
+    {name:"Galaxy S26 FE · 256GB",       price:19299},
     {name:"Galaxy Z Fold8 Ultra · 1TB",  price:63499},
     {name:"Galaxy Z Fold8 Ultra · 512GB",price:53499},
     {name:"Galaxy Z Fold8 · 512GB",      price:48499},
-    {name:"Galaxy Z Flip8 · 512GB",      price:32999}
+    {name:"Galaxy Z Flip8 · 512GB",      price:32999},
+    {name:"Galaxy A57 5G · 256GB",       price:11999},
+    {name:"Galaxy A37 5G · 128GB",       price:7999},
+    {name:"Galaxy A27 5G · 128GB",       price:6599},
+    {name:"Galaxy A18 LTE · 128GB",      price:4999},
+    {name:"Galaxy A08 LTE · 128GB",      price:3799},
+    {name:"Galaxy A08 LTE · 64GB",       price:2799}
   ];
 
   /* ---- Samsung Care+ data (Samsung.com MX, checked 2026-09-03, MXN) ----
@@ -2930,7 +2968,10 @@ var qrcode = function() {
     ]
   };
   // model index (MODELS order) -> SC_PLANS key
-  var SC_MAP = ["s26u","s26u","s26","s26","zfu1tb","zfu512","zf512","zflip512"];
+  // model index (MODELS order) -> SC_PLANS key. null = Care+ not offered for that model.
+  var SC_MAP = ["s26u","s26u","s26","s26",null,
+                "zfu1tb","zfu512","zf512","zflip512",
+                null,null,null,null,null,null];
 
   var I18N = {
     en:{
@@ -2962,7 +3003,13 @@ var qrcode = function() {
       scq_title:"Samsung Care+ Simulation — Liverpool",
       scq_model:"Device", scq_plan:"Plan", scq_pay:"Payment", scq_cover:"Coverage", scq_price:"Price",
       scq_disc:"*Reference only. Final terms per Samsung Care+ conditions & Liverpool POS.",
-      lbl_model:"Model", grp_s:"Galaxy S26 Series", grp_z:"Galaxy Z Series",
+      lbl_model:"Model", grp_s:"Galaxy S26 Series", grp_z:"Galaxy Z Series", grp_a:"Galaxy A Series",
+      sc_na:"Samsung Care+ is not offered for this model on Samsung.com MX.",
+      cs_pick_lab:"AMOUNT TO FINANCE", cs_pick_cut:"Pick a term to see the monthly payment",
+      pick_term:"Select a financing term", dash:"—",
+      cs_rrp:"RETAIL PRICE (RRP)", cs_trade:"AFTER TRADE-IN", cs_promo:"WITH PROMOTION",
+      cut_trade:"– MXN {v} trade-in", cut_promo:"– MXN {v} promotion", cut_split:"÷ {n} months",
+      note_total:"{n} × MXN {v}",
       rrp_label:"Recommended retail price (RRP)",
       lbl_tradein:"Trade-in", t_no:"No", t_yes:"Yes",
       tradein_label:"Trade-in device value (RV)",
@@ -2980,7 +3027,7 @@ var qrcode = function() {
       tn_interestfree:"interest-free (MSI)", tn_annual:"annual interest", tn_financed:"financed (EIP)",
       bd_rrp:"RRP", bd_trade:"Trade-in", bd_promo:"Promotion",
       bd_finance:"Amount to finance", bd_rate:"Annual interest rate",
-      bd_term:"÷ Term", bd_total:"Total to pay",
+      bd_term:"÷ Term", bd_total:"Total price",
       act_copy:"Copy quote", act_print:"Print", act_reset:"Reset",
       act_share:"Share · QR", act_pdf:"PDF",
       qr_title:"Scan to view this quote", qr_sub:"The customer scans with their phone camera to reopen this exact simulation on their own device.",
@@ -3044,7 +3091,13 @@ var qrcode = function() {
       scq_title:"Simulación Samsung Care+ — Liverpool",
       scq_model:"Equipo", scq_plan:"Plan", scq_pay:"Pago", scq_cover:"Cobertura", scq_price:"Precio",
       scq_disc:"*Solo referencia. Términos finales según condiciones de Samsung Care+ y POS de Liverpool.",
-      lbl_model:"Modelo", grp_s:"Serie Galaxy S26", grp_z:"Serie Galaxy Z",
+      lbl_model:"Modelo", grp_s:"Serie Galaxy S26", grp_z:"Serie Galaxy Z", grp_a:"Serie Galaxy A",
+      sc_na:"Samsung Care+ no está disponible para este modelo en Samsung.com MX.",
+      cs_pick_lab:"MONTO A FINANCIAR", cs_pick_cut:"Elige un plazo para ver el pago mensual",
+      pick_term:"Elige un plazo de financiamiento", dash:"—",
+      cs_rrp:"PRECIO DE LISTA (PVP)", cs_trade:"CON EQUIPO A CUENTA", cs_promo:"CON PROMOCIÓN",
+      cut_trade:"– MXN {v} equipo a cuenta", cut_promo:"– MXN {v} promoción", cut_split:"÷ {n} meses",
+      note_total:"{n} × MXN {v}",
       rrp_label:"Precio de venta sugerido (PVP)",
       lbl_tradein:"Equipo a cuenta", t_no:"No", t_yes:"Sí",
       tradein_label:"Valor del equipo a cuenta (VR)",
@@ -3062,7 +3115,7 @@ var qrcode = function() {
       tn_interestfree:"sin intereses (MSI)", tn_annual:"interés anual", tn_financed:"financiado (EIP)",
       bd_rrp:"PVP", bd_trade:"Equipo a cuenta", bd_promo:"Promoción",
       bd_finance:"Monto a financiar", bd_rate:"Tasa de interés anual",
-      bd_term:"÷ Plazo", bd_total:"Total a pagar",
+      bd_term:"÷ Plazo", bd_total:"Precio total",
       act_copy:"Copiar", act_print:"Imprimir", act_reset:"Reiniciar",
       st_title:"Argumento de venta recomendado", st_copy:"Copiar",
       disclaimer:"Todas las cifras son una simulación solo para referencia. La transacción final se rige por el sistema POS de Liverpool, el resultado de la inspección del equipo, las condiciones de la promoción vigente, el método de pago y las políticas de la tienda.",
@@ -3103,7 +3156,7 @@ var qrcode = function() {
   };
 
   var state = { lang:"en", tab:"phone", modelIdx:0, rrp:MODELS[0].price, modelName:MODELS[0].name,
-                tradeOn:false, tradein:0, promo:0, term:24, msi:true, rate:0,
+                tradeOn:false, tradein:0, promo:0, term:null, msi:true, rate:0,
                 scPlan:null, scPay:null };
 
   // ---- Restore state from URL (QR / shared link) ----
@@ -3148,7 +3201,7 @@ var qrcode = function() {
     var p = [];
     p.push("m="+state.modelIdx);
     p.push("lang="+state.lang);
-    p.push("t="+state.term);
+    if(state.term) p.push("t="+state.term);
     if(state.tradeOn && state.tradein>0) p.push("ti="+state.tradein);
     if(state.promo>0) p.push("pr="+state.promo);
     if(!state.msi){ p.push("msi=0"); if(state.rate>0) p.push("r="+state.rate); }
@@ -3168,16 +3221,20 @@ var qrcode = function() {
     var trade = state.tradeOn ? state.tradein : 0;
     var finance = state.rrp - trade - state.promo;
     if(finance < 0) finance = 0;
-    var monthly;
+    var hasTerm = state.term > 0;
+    var monthly = 0;
     var withInterest = (!state.msi && state.rate > 0);
-    if(withInterest){
-      var r = (state.rate/100)/12;
-      monthly = finance * r / (1 - Math.pow(1+r, -state.term));
-    } else {
-      monthly = state.term > 0 ? finance/state.term : 0;
+    if(hasTerm){
+      if(withInterest){
+        var r = (state.rate/100)/12;
+        monthly = finance * r / (1 - Math.pow(1+r, -state.term));
+      } else {
+        monthly = finance/state.term;
+      }
     }
-    var total = monthly * state.term;
-    return { trade:trade, finance:finance, monthly:monthly, total:total, withInterest:withInterest };
+    var total = hasTerm ? monthly * state.term : 0;
+    return { trade:trade, finance:finance, monthly:monthly, total:total,
+             withInterest:withInterest, hasTerm:hasTerm };
   }
 
   function termSuffix(){
@@ -3187,6 +3244,11 @@ var qrcode = function() {
   }
 
   function salesTalkText(r){
+    if(!r.hasTerm){
+      return state.lang==="es"
+        ? "Con este equipo en MXN "+fmt(r.finance)+" a financiar, elige el plazo (12, 18, 20 o 24 meses) y te muestro el pago mensual exacto para cerrar la venta."
+        : "With MXN "+fmt(r.finance)+" left to finance, pick a term (12, 18, 20 or 24 months) and I'll show the exact monthly payment to close the sale.";
+    }
     var perDay = r.monthly/30;
     var name = state.modelName.replace(/\s·\s/g," ");
     var s=[];
@@ -3273,6 +3335,13 @@ var qrcode = function() {
         '<div class="scpay"><div class="scpay-lbl">'+t("sc_pay_label")+'</div><div class="payrow">'+payHtml+'</div></div>';
       host.appendChild(btn);
     });
+
+    if(!plans.length){
+      var na=document.createElement("div");
+      na.className="scnote"; na.style.marginTop="0"; na.style.marginBottom="10px";
+      na.textContent=t("sc_na");
+      host.appendChild(na);
+    }
 
     // "No protection" option (always present)
     var none=document.createElement("button");
@@ -3531,6 +3600,7 @@ var qrcode = function() {
   /* ---------- PDF (print-to-PDF of the active panel) ---------- */
   function makePDF(){
     // Reuse the browser's print pipeline (Save as PDF). Print CSS already isolates the active panel.
+    render("settle");              // settle the running figure before printing
     toast(t("toast_pdf"));
     setTimeout(function(){ window.print(); }, 250);
   }
@@ -3579,31 +3649,121 @@ var qrcode = function() {
   }
   function closeInfo(){ $("infoModal").classList.remove("show"); }
 
-  function render(){
+  /* ---------- Running price: each change discounts from the last shown figure ---------- */
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var animToken = 0, animTimer = null, shown = null;   // shown = figure currently on screen
+
+  function tf(k, map){ var s = t(k); for(var p in map){ s = s.replace("{"+p+"}", map[p]); } return s; }
+
+  function tween(from, to, dur, my, done){
+    if(reduceMotion || dur <= 0){ shown = to; $("monthly").textContent = fmt(to); if(done) done(); return; }
+    var start = null;
+    function step(ts){
+      if(my !== animToken) return;
+      if(start === null) start = ts;
+      var p = Math.min(1, (ts - start)/dur);
+      var e = 1 - Math.pow(1 - p, 3);
+      shown = from + (to - from)*e;
+      $("monthly").textContent = fmt(shown);
+      if(p < 1){ requestAnimationFrame(step); }
+      else { shown = to; $("monthly").textContent = fmt(to); if(done) done(); }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // 4 markers: retail price · trade-in · promotion · payment
+  function setSteps(r){
+    var on = [true, r.trade > 0, state.promo > 0, r.hasTerm];
+    var kids = $("steps").children;
+    for(var i=0;i<kids.length;i++){ kids[i].className = on[i] ? "on" : ""; }
+  }
+
+  // where the running figure stands right now
+  function targetValue(r){ return r.hasTerm ? r.monthly : r.finance; }
+
+  function stateLabel(r){
+    if(r.hasTerm) return t("res_kicker");
+    if(state.promo > 0) return t("cs_promo");
+    if(r.trade > 0) return t("cs_trade");
+    return t("cs_rrp");
+  }
+
+  function splitCut(r){
+    return tf("cut_split", {n:state.term}) + (r.withInterest ? " · " + state.rate + "%" : "");
+  }
+
+  // the line under the figure explains the change that was just applied
+  function cutFor(reason, r){
+    if(reason === "trade" && r.trade > 0)      return tf("cut_trade", {v:fmt(r.trade)});
+    if(reason === "promo" && state.promo > 0)  return tf("cut_promo", {v:fmt(state.promo)});
+    if(reason === "term" || reason === "msi" || reason === "rate"){
+      return r.hasTerm ? splitCut(r) : t("cs_pick_cut");
+    }
+    if(r.hasTerm) return splitCut(r);
+    if(state.promo > 0) return tf("cut_promo", {v:fmt(state.promo)});
+    if(r.trade > 0)     return tf("cut_trade", {v:fmt(r.trade)});
+    return t("cs_pick_cut");
+  }
+
+  function paintAmount(reason, r, value){
+    $("monthly").textContent = fmt(value);
+    $("stageLab").textContent = stateLabel(r);
+    $("stageLab").className = "kicker" + (r.hasTerm ? " live" : "");
+    $("stageCut").textContent = cutFor(reason, r);
+    setSteps(r);
+  }
+
+  function updateAmount(reason, delay, r){
+    var to = targetValue(r);
+    animToken++; clearTimeout(animTimer);              // cancel whatever was running
+
+    // first paint, print/PDF, or reduced motion: no animation
+    if(shown === null || reason === "settle" || reduceMotion){
+      shown = to; paintAmount(reason, r, to);
+      return;
+    }
+    var my = animToken;
+    animTimer = setTimeout(function(){
+      if(my !== animToken) return;
+      var from = shown;                                 // start from what the customer sees
+      $("stageLab").textContent = stateLabel(r);
+      $("stageLab").className = "kicker" + (r.hasTerm ? " live" : "");
+      $("stageCut").textContent = cutFor(reason, r);
+      setSteps(r);
+      if(Math.abs(to - from) < 0.005){ shown = to; $("monthly").textContent = fmt(to); return; }
+      tween(from, to, 560, my);
+    }, delay == null ? 350 : delay);
+  }
+
+  function render(reason, delay){
     var r = compute();
     var mUnit = t("unit_months");
 
-    $("monthly").textContent = fmt(r.monthly);
-    $("stickyMonthly").textContent = fmt(r.monthly);
-    $("stickyTerm").textContent = state.term + " " + mUnit;
+    $("stickyMonthly").textContent = r.hasTerm ? fmt(r.monthly) : t("dash");
+    $("stickyTerm").textContent = r.hasTerm ? (state.term + " " + mUnit) : t("pick_term");
     $("stickyModel").textContent = state.modelName;
     $("resultModel").textContent = state.modelName;
-    $("termLine").textContent = state.term + " " + t("unit_payments") + " · " + termSuffix();
+    $("termLine").textContent = r.hasTerm
+      ? (state.term + " " + t("unit_payments") + " · " + termSuffix())
+      : t("pick_term");
     $("salesTalk").textContent = salesTalkText(r);
 
     $("bRRP").textContent    = "MXN " + fmt(state.rrp);
-    $("bTrade").textContent  = "– MXN " + fmt(state.tradeOn ? state.tradein : 0);
+    $("bTrade").textContent  = "– MXN " + fmt(r.trade);
     $("bPromo").textContent  = "– MXN " + fmt(state.promo);
     $("bFinance").textContent= "MXN " + fmt(r.finance);
-    $("bTerm").textContent   = state.term + " " + mUnit;
+    $("bTerm").textContent   = r.hasTerm ? (state.term + " " + mUnit) : t("dash");
     $("bTradeRow").style.display = state.tradeOn ? "flex" : "none";
 
-    var showInt = r.withInterest;
-    $("bRateRow").style.display  = showInt ? "flex" : "none";
-    $("bTotalRow").style.display = showInt ? "flex" : "none";
-    if(showInt){ $("bRate").textContent = state.rate + "%"; $("bTotal").textContent = "MXN " + fmt(r.total); }
+    $("bRateRow").style.display = r.withInterest ? "flex" : "none";
+    if(r.withInterest){ $("bRate").textContent = state.rate + "%"; }
+
+    $("bTotal").textContent    = r.hasTerm ? fmt(r.total) : t("dash");
+    $("totalNote").textContent = r.hasTerm ? tf("note_total", {n:state.term, v:fmt(r.monthly)}) : "";
 
     $("rrpHint").textContent = "MXN " + fmt0(state.rrp);
+
+    updateAmount(reason, delay, r);
   }
 
   function applyLang(){
@@ -3617,9 +3777,10 @@ var qrcode = function() {
     var ogs = document.querySelectorAll("#model optgroup");
     if(ogs[0]) ogs[0].label = t("grp_s");
     if(ogs[1]) ogs[1].label = t("grp_z");
+    if(ogs[2]) ogs[2].label = t("grp_a");
     Array.prototype.forEach.call($("termToggle").children, function(b){ b.textContent = b.getAttribute("data-term") + " " + t("unit_mo"); });
     Array.prototype.forEach.call($("langToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-lang")===state.lang ? "true":"false"); });
-    render();
+    render("settle");
     buildScOptions(); renderSc();
   }
 
@@ -3642,7 +3803,7 @@ var qrcode = function() {
         if(!ok) state.scPay = list.length?list[0].key:null;
       }
     }
-    render();
+    render("model", 120);
     if(state.tab==="scplus"){ buildScOptions(); renderSc(); }
   });
 
@@ -3687,18 +3848,18 @@ var qrcode = function() {
       Array.prototype.forEach.call($("tradeToggle").children, function(b){ b.setAttribute("aria-pressed",(b.getAttribute("data-trade")==="on")===on?"true":"false"); });
       $("tradeinField").classList.toggle("show", on);
       if(!on){ $("tradein").value=""; state.tradein=0; }
-      render();
+      render("trade", 120);
     });
   });
-  $("tradein").addEventListener("input", function(){ state.tradein = parseMoney(this.value); render(); });
-  $("promo").addEventListener("input", function(){ state.promo = parseMoney(this.value); render(); });
+  $("tradein").addEventListener("input", function(){ state.tradein = parseMoney(this.value); render("trade", 650); });
+  $("promo").addEventListener("input", function(){ state.promo = parseMoney(this.value); render("promo", 650); });
 
   // Term toggle
   Array.prototype.forEach.call($("termToggle").children, function(btn){
     btn.addEventListener("click", function(){
       state.term = parseInt(this.getAttribute("data-term"),10);
       Array.prototype.forEach.call($("termToggle").children, function(b){ b.setAttribute("aria-pressed", b===btn?"true":"false"); });
-      render();
+      render("term", 120);
     });
   });
 
@@ -3709,10 +3870,10 @@ var qrcode = function() {
       Array.prototype.forEach.call($("msiToggle").children, function(b){ b.setAttribute("aria-pressed",(b.getAttribute("data-msi")==="yes")===yes?"true":"false"); });
       $("rateField").classList.toggle("show", !yes);
       if(yes){ $("rate").value=""; state.rate=0; }
-      render();
+      render("msi", 120);
     });
   });
-  $("rate").addEventListener("input", function(){ state.rate = parseMoney(this.value); render(); });
+  $("rate").addEventListener("input", function(){ state.rate = parseMoney(this.value); render("rate", 650); });
 
   // Toast
   var toastTimer;
@@ -3725,14 +3886,18 @@ var qrcode = function() {
     if(state.tradeOn) lines.push(t("q_trade")+": – MXN "+fmt(state.tradein));
     lines.push(t("q_promo")+": – MXN "+fmt(state.promo));
     lines.push(t("q_finance")+": MXN "+fmt(r.finance));
-    lines.push(t("q_term")+": "+state.term+" "+t("unit_months")+" (EIP/MSI)");
-    if(r.withInterest){
-      lines.push(t("q_rate")+": "+state.rate+"%");
+    if(r.hasTerm){
+      lines.push(t("q_term")+": "+state.term+" "+t("unit_months")+" (EIP/MSI)");
+      if(r.withInterest){
+        lines.push(t("q_rate")+": "+state.rate+"%");
+      } else {
+        lines.push("MSI: "+t("q_msi_free"));
+      }
+      lines.push(t("q_monthly")+": MXN "+fmt(r.monthly));
       lines.push(t("q_total")+": MXN "+fmt(r.total));
     } else {
-      lines.push("MSI: "+t("q_msi_free"));
+      lines.push(t("q_term")+": "+t("pick_term"));
     }
-    lines.push(t("q_monthly")+": MXN "+fmt(r.monthly));
     lines.push(""); lines.push(t("q_disc"));
     doCopy(lines.join("\n"), t("toast_quote"));
   });
@@ -3753,19 +3918,19 @@ var qrcode = function() {
   }
 
   // Print
-  $("printBtn").addEventListener("click", function(){ window.print(); });
+  $("printBtn").addEventListener("click", function(){ render("settle"); window.print(); });
 
   // Reset
   $("resetBtn").addEventListener("click", function(){
     var lang = state.lang, tab = state.tab;
-    state = { lang:lang, tab:tab, modelIdx:0, rrp:MODELS[0].price, modelName:MODELS[0].name, tradeOn:false, tradein:0, promo:0, term:24, msi:true, rate:0, scPlan:null, scPay:null };
+    state = { lang:lang, tab:tab, modelIdx:0, rrp:MODELS[0].price, modelName:MODELS[0].name, tradeOn:false, tradein:0, promo:0, term:null, msi:true, rate:0, scPlan:null, scPay:null };
     $("model").value="0"; $("tradein").value=""; $("promo").value=""; $("rate").value="";
     Array.prototype.forEach.call($("tradeToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-trade")==="off"?"true":"false"); });
     $("tradeinField").classList.remove("show");
-    Array.prototype.forEach.call($("termToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-term")==="24"?"true":"false"); });
+    Array.prototype.forEach.call($("termToggle").children, function(b){ b.setAttribute("aria-pressed","false"); });
     Array.prototype.forEach.call($("msiToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-msi")==="yes"?"true":"false"); });
     $("rateField").classList.remove("show");
-    render(); buildScOptions(); renderSc(); toast(t("toast_reset"));
+    shown = null; render("reset"); buildScOptions(); renderSc(); toast(t("toast_reset"));
   });
 
   // ---- Sync all controls to (possibly URL-restored) state ----
