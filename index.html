@@ -452,7 +452,7 @@
       <div class="st-head">
         <span class="st-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <span data-i18n="st_title">Recommended sales talk</span>
+          <span data-i18n="st_title">Why this plan works for you</span>
         </span>
         <button class="st-copy" id="copyTalkBtn" data-i18n="st_copy">Copy</button>
       </div>
@@ -514,7 +514,7 @@
       <div class="st-head">
         <span class="st-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <span data-i18n="sc_st_title">Recommended Care+ sales talk</span>
+          <span data-i18n="sc_st_title">Why Care+ makes sense for you</span>
         </span>
         <button class="st-copy" id="scCopyTalkBtn" data-i18n="st_copy">Copy</button>
       </div>
@@ -2985,7 +2985,8 @@ var qrcode = function() {
       sc_pay_label:"Payment option",
       sc_bd_plan:"Plan", sc_bd_pay:"Payment option", sc_bd_cover:"Coverage period", sc_bd_price:"Care+ price",
       sc_act_copy:"Copy Care+ quote",
-      sc_st_title:"Recommended Care+ sales talk",
+      st_title:"Why this plan works for you", st_copy:"Copy",
+      sc_st_title:"Why Care+ makes sense for you",
       sc_sticky_lab:"Samsung Care+",
       sc_disclaimer:"Samsung Care+ prices are Samsung.com MX reference figures (checked 2026-09-03) and may change without notice. Coverage, service type and deductible follow Samsung Care+ terms; insurer: Virginia Surety Seguros de México (Assurant). 1 event per year; if repair costs more, the device is replaced.",
       pay_monthly:"Monthly", pay_1y:"One-time · 1 year", pay_2y:"One-time · 2 years",
@@ -3032,6 +3033,11 @@ var qrcode = function() {
       act_share:"Share · QR", act_pdf:"PDF",
       qr_title:"Scan to view this quote", qr_sub:"The customer scans with their phone camera to reopen this exact simulation on their own device.",
       qr_copy:"Copy", qr_cap_phone:"Finance quote · {model}", qr_cap_sc:"Samsung Care+ · {model}",
+      send_wa:"WhatsApp", send_sms:"SMS",
+      send_msg_phone:"Here's your Samsung Galaxy finance quote from Liverpool — {model}, MXN {monthly}/mo for {term} months. Open the link to see the full simulation:",
+      send_msg_phone_noterm:"Here's your Samsung Galaxy quote from Liverpool — {model}. Open the link to pick a term and see the monthly payment:",
+      send_msg_sc:"Here's your Samsung Care+ quote from Liverpool — {model}. Open the link for the details:",
+      toast_wa:"Opening WhatsApp…", toast_sms:"Opening Messages…", toast_share_warn:"Set the hosting URL first (⚙)",
       toast_link:"Link copied", toast_pdf:"Preparing PDF…", toast_qr:"QR ready to scan",
       qr_setlink:"Change hosting URL",
       qr_warn_title:"This QR won't open on a phone yet.",
@@ -3073,7 +3079,7 @@ var qrcode = function() {
       sc_pay_label:"Opción de pago",
       sc_bd_plan:"Plan", sc_bd_pay:"Opción de pago", sc_bd_cover:"Periodo de cobertura", sc_bd_price:"Precio Care+",
       sc_act_copy:"Copiar Care+",
-      sc_st_title:"Argumento de venta Care+ recomendado",
+      sc_st_title:"Por qué te conviene Care+",
       sc_sticky_lab:"Samsung Care+",
       sc_disclaimer:"Los precios de Samsung Care+ son cifras de referencia de Samsung.com MX (consultado 2026-09-03) y pueden cambiar sin previo aviso. La cobertura, el tipo de servicio y el deducible se rigen por los términos de Samsung Care+; aseguradora: Virginia Surety Seguros de México (Assurant). 1 evento por año; si reparar cuesta más, se reemplaza el equipo.",
       pay_monthly:"Mensual", pay_1y:"Pago único · 1 año", pay_2y:"Pago único · 2 años",
@@ -3117,12 +3123,17 @@ var qrcode = function() {
       bd_finance:"Monto a financiar", bd_rate:"Tasa de interés anual",
       bd_term:"÷ Plazo", bd_total:"Precio total",
       act_copy:"Copiar", act_print:"Imprimir", act_reset:"Reiniciar",
-      st_title:"Argumento de venta recomendado", st_copy:"Copiar",
+      st_title:"Por qué te conviene este plan", st_copy:"Copiar",
       disclaimer:"Todas las cifras son una simulación solo para referencia. La transacción final se rige por el sistema POS de Liverpool, el resultado de la inspección del equipo, las condiciones de la promoción vigente, el método de pago y las políticas de la tienda.",
       toast_quote:"Cotización copiada", toast_talk:"Argumento copiado", toast_reset:"Reiniciado", toast_fail:"Error al copiar",
       act_share:"Compartir · QR", act_pdf:"PDF",
       qr_title:"Escanea para ver esta cotización", qr_sub:"El cliente escanea con la cámara de su celular para reabrir esta misma simulación en su propio equipo.",
       qr_copy:"Copiar", qr_cap_phone:"Cotización de financiamiento · {model}", qr_cap_sc:"Samsung Care+ · {model}",
+      send_wa:"WhatsApp", send_sms:"SMS",
+      send_msg_phone:"Aquí está tu cotización Samsung Galaxy de Liverpool — {model}, MXN {monthly}/mes a {term} meses. Abre el enlace para ver la simulación completa:",
+      send_msg_phone_noterm:"Aquí está tu cotización Samsung Galaxy de Liverpool — {model}. Abre el enlace para elegir el plazo y ver el pago mensual:",
+      send_msg_sc:"Aquí está tu cotización Samsung Care+ de Liverpool — {model}. Abre el enlace para ver los detalles:",
+      toast_wa:"Abriendo WhatsApp…", toast_sms:"Abriendo Mensajes…", toast_share_warn:"Configura la URL de alojamiento primero (⚙)",
       toast_link:"Enlace copiado", toast_pdf:"Preparando PDF…", toast_qr:"QR listo para escanear",
       qr_setlink:"Cambiar URL de alojamiento",
       qr_warn_title:"Este QR aún no se abrirá en un celular.",
@@ -3513,8 +3524,37 @@ var qrcode = function() {
   }
 
   /* ---------- Share / QR modal ---------- */
+  function shareMessage(forTab, url){
+    var r = compute();
+    var msg;
+    if(forTab === "scplus"){
+      msg = tf("send_msg_sc", { model: state.modelName });
+    } else if(r.hasTerm){
+      msg = tf("send_msg_phone", { model: state.modelName, monthly: fmt(r.monthly), term: state.term });
+    } else {
+      msg = tf("send_msg_phone_noterm", { model: state.modelName });
+    }
+    return msg + " " + url;
+  }
+
+  // wire the WhatsApp / SMS deep links for the current quote
+  function setupSendLinks(forTab, url){
+    var usable = shareBaseIsUsable();
+    var text = shareMessage(forTab, url);
+    var wa  = $("sendWa"), sms = $("sendSms");
+
+    // WhatsApp: wa.me opens the app / web with the message prefilled; user picks the contact
+    wa.href = "https://wa.me/?text=" + encodeURIComponent(text);
+    // SMS: prefilled body, no recipient (works on iOS & Android)
+    sms.href = "sms:?&body=" + encodeURIComponent(text);
+
+    wa.classList.toggle("disabled", !usable);
+    sms.classList.toggle("disabled", !usable);
+  }
+
   function openShare(forTab){
     var url = buildShareURL(forTab);
+    setupSendLinks(forTab, url);
     var holder = $("qrHolder");
     holder.innerHTML = "";
     try{
@@ -3829,6 +3869,14 @@ var qrcode = function() {
   $("infoModal").addEventListener("click", function(e){ if(e.target===this) closeInfo(); });
   document.addEventListener("keydown", function(e){ if(e.key==="Escape"){ closeShare(); closeInfo(); closeSettings(); } });
   $("qrCopyLink").addEventListener("click", function(){ doCopy($("qrLink").value, t("toast_link")); });
+  $("sendWa").addEventListener("click", function(e){
+    if(!shareBaseIsUsable()){ e.preventDefault(); toast(t("toast_share_warn")); openSettings(); return; }
+    toast(t("toast_wa"));
+  });
+  $("sendSms").addEventListener("click", function(e){
+    if(!shareBaseIsUsable()){ e.preventDefault(); toast(t("toast_share_warn")); openSettings(); return; }
+    toast(t("toast_sms"));
+  });
 
   // Settings (hosting URL)
   $("gearBtn").addEventListener("click", openSettings);
