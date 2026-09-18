@@ -44,15 +44,64 @@
   .sub{font-size:13px;color:#9AA0AE;margin:0;}
 
   /* Tab */
-  .tabs{background:var(--ink);padding:6px 20px 0;display:flex;gap:22px;}
+  .tabs{background:var(--ink);padding:6px 20px 0;display:flex;gap:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{white-space:nowrap;}
   .tab{display:inline-flex;align-items:center;gap:7px;color:#8A90A0;font-weight:600;font-size:15px;padding:10px 2px 12px;border-bottom:3px solid transparent;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;cursor:pointer;}
   .tab[aria-selected="true"]{color:#fff;border-bottom-color:var(--brand);}
   .tab svg{width:18px;height:18px;}
 
   /* Panels */
-  #panel-scplus{display:none;}
+  #panel-scplus,#panel-eco,#panel-clips{display:none;}
   body.tab-scplus #panel-phone{display:none;}
   body.tab-scplus #panel-scplus{display:block;}
+  body.tab-eco #panel-phone{display:none;}
+  body.tab-eco #panel-eco{display:block;}
+  body.tab-clips #panel-phone{display:none;}
+  body.tab-clips #panel-clips{display:block;}
+  body.tab-clips{padding-bottom:28px;}
+
+  /* Clips tab */
+  .clipsec{padding:0;overflow:hidden;}
+  .cs-h{background:#F7F8FB;border-bottom:1px solid var(--line);padding:11px 15px;font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .cs-h .cs-n{font-size:11.5px;font-weight:600;color:var(--muted);}
+  .cs-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:9px;}
+  .clipcard{display:flex;align-items:center;gap:11px;text-decoration:none;border:1.5px solid var(--line);border-radius:12px;padding:9px 11px 9px 9px;background:#fff;transition:border-color .15s,box-shadow .15s;}
+  .clipcard:active{transform:scale(.995);}
+  .clipcard:hover{border-color:var(--brand);}
+  .cc-tile{flex:none;width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;letter-spacing:.02em;text-align:center;line-height:1.15;padding:3px;}
+  .tf-yt{background:linear-gradient(135deg,#1b1e26,#5c0f0f);}
+  .tf-ig{background:linear-gradient(135deg,#7028c9 5%,#d6249f 55%,#fd9346);}
+  .tf-tt{background:linear-gradient(135deg,#010101 30%,#12343a 75%,#25f4ee);}
+  .tf-fb{background:linear-gradient(135deg,#0b3d8c,#1877f2);}
+  .tf-link{background:linear-gradient(135deg,#333a46,#c00);}
+  .cc-meta{flex:1;min-width:0;}
+  .cc-meta b{display:block;font-size:14px;font-weight:600;color:var(--text);line-height:1.32;}
+  .cc-meta small{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35;}
+  .cc-pill{display:inline-block;font-size:10px;font-weight:800;color:#fff;background:var(--brand);border-radius:999px;padding:2px 7px;margin-bottom:4px;letter-spacing:.02em;}
+  .cc-go{flex:none;color:var(--muted);}
+  .cc-go svg{width:17px;height:17px;}
+  .clip-empty{padding:26px 18px;text-align:center;color:var(--muted);font-size:14px;line-height:1.5;}
+  .clip-note{background:var(--brand-soft);color:var(--brand);border-radius:12px;padding:10px 13px;font-size:12.5px;font-weight:600;line-height:1.45;margin-bottom:12px;}
+
+  /* Bundle summary (Add-ons tab) */
+  .bundle{padding:0;overflow:hidden;}
+  .bundle-head{background:var(--ink);color:#fff;padding:13px 16px;font-size:13px;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;gap:8px;}
+  .bundle-head svg{width:16px;height:16px;flex:none;}
+  .bundle-body{padding:6px 16px 12px;}
+  .brow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+  .brow:last-child{border-bottom:none;}
+  .brow .bk{font-size:14px;font-weight:600;color:var(--text);line-height:1.3;}
+  .brow .bk small{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:2px;}
+  .brow .bv{font-size:15px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right;}
+  .brow .bv small{display:block;font-size:11.5px;font-weight:600;color:var(--muted);margin-top:2px;}
+  .brow.muted .bk,.brow.muted .bv{color:var(--muted);font-weight:600;}
+  .bgrand{background:var(--brand);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .bgrand .gk{font-size:13px;font-weight:700;line-height:1.25;}
+  .bgrand .gk small{display:block;font-size:11.5px;font-weight:600;color:rgba(255,255,255,.8);margin-top:2px;}
+  .bgrand .gv{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .bgrand .gv .cursym{font-size:13px;font-weight:700;margin-right:4px;vertical-align:3px;}
+  .bgrand .gv small{display:block;font-size:11.5px;font-weight:600;color:rgba(255,255,255,.85);margin-top:2px;text-align:right;}
 
   /* SC+ device chip */
   .scdev{display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:16px;}
@@ -122,8 +171,26 @@
   .money input::placeholder{color:#B4B9C4;font-weight:500;}
   .hint{font-size:12px;color:var(--muted);margin-top:7px;}
 
-  #tradeinField,#rateField{display:none;}
-  #tradeinField.show,#rateField.show{display:block;}
+  #tradeinField,#rateField,#ecoRateField{display:none;}
+  #tradeinField.show,#rateField.show,#ecoRateField.show{display:block;}
+  /* Eco product category blocks (model + its own MBO rate) */
+  .ecocat{border:1.5px solid var(--line);border-radius:14px;padding:12px 13px;background:#fff;margin-bottom:10px;transition:border-color .15s,box-shadow .15s;cursor:pointer;}
+  .ecocat:last-of-type{margin-bottom:12px;}
+  .ecocat.active{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft);}
+  .ecocat-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;}
+  .ecocat-t{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.01em;}
+  .ecocat.active .ecocat-t{color:var(--brand);}
+  .ecocat-badge{display:none;font-size:11px;font-weight:700;color:#fff;background:var(--brand);border-radius:999px;padding:3px 9px;}
+  .ecocat.active .ecocat-badge{display:inline-block;}
+  .ecocat .selectwrap select{padding:12px 40px 12px 12px;font-size:15px;}
+  .pctline{display:flex;align-items:center;gap:10px;margin-top:9px;}
+  .pctline .pl{flex:1;font-size:13.5px;font-weight:600;color:var(--muted);}
+  .ecocat.active .pctline .pl{color:var(--text);}
+  .pctline .money{flex:none;width:104px;border-radius:10px;}
+  .pctline .money input{padding:9px 10px;font-size:15px;text-align:right;}
+  .pctline .money .cur{padding:0 10px;font-size:13px;}
+  .ecocat-hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45;}
+  .ecocat.active .ecocat-hint{color:var(--brand);font-weight:600;}
 
   /* Result */
   .result{background:linear-gradient(135deg,var(--ink) 0%,var(--ink-2) 60%);border:none;color:#fff;overflow:hidden;position:relative;padding:0;}
@@ -177,6 +244,7 @@
     /* Phone tab: hide the phone input card. SC+ tab: hide the plan-picker card & device chip. */
     body:not(.tab-scplus) #panel-phone>.card:first-of-type{display:none;}
     body.tab-scplus #panel-scplus>.card:first-of-type{display:none;}
+    body.tab-eco #panel-eco>.card:first-of-type{display:none;}
     body.tab-scplus .scdev{display:none;}
     .scpay{display:block !important;} /* show chosen payment in print */
     .scopt:not([aria-pressed="true"]){display:none;} /* print only the selected plan */
@@ -203,6 +271,9 @@
     .payopt[aria-pressed="true"] .pay-k,.payopt[aria-pressed="true"] .pay-v,.payopt[aria-pressed="true"] .pay-sub{color:#000;}
     .scdev{border:1px solid #bbb;} .scdev .ic{background:#eee;} .scdev .ic svg{color:#000;}
     .scnote{background:#fff;border:1px solid #bbb;color:#333;}
+    .bundle-head{background:#fff;color:#000;border-bottom:1.5px solid #000;}
+    .bgrand{background:#fff;color:#000;border-top:1.5px solid #000;}
+    .bgrand .gk small,.bgrand .gv small{color:#444;}
   }
 
   .sticky{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(10,14,26,.97);backdrop-filter:blur(8px);color:#fff;padding:12px 18px;padding-bottom:calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -6px 24px rgba(10,14,26,.18);}
@@ -227,6 +298,13 @@
   .qrframe{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);}
   .qrframe svg{display:block;width:220px;height:220px;}
   .qr-cap{font-size:13px;color:var(--muted);text-align:center;line-height:1.5;max-width:320px;}
+  .qr-send{width:100%;display:flex;gap:10px;margin-top:2px;}
+  .send-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-family:inherit;font-size:15px;font-weight:700;padding:13px 8px;border-radius:12px;cursor:pointer;min-height:50px;color:#fff;-webkit-tap-highlight-color:transparent;}
+  .send-btn:active{transform:scale(.98);}
+  .send-btn svg{width:20px;height:20px;fill:currentColor;flex:none;}
+  .send-btn.wa{background:#25D366;}
+  .send-btn.sms{background:var(--brand);}
+  .send-btn.disabled{opacity:.45;pointer-events:none;}
   .qr-link{width:100%;display:flex;align-items:center;gap:8px;background:#F7F8FA;border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;margin-top:4px;}
   .qr-link input{flex:1;border:none;background:transparent;font-family:inherit;font-size:13px;color:var(--text);outline:none;text-overflow:ellipsis;}
   .qr-link button{flex:none;font-family:inherit;font-size:13px;font-weight:700;color:var(--brand);background:none;border:none;cursor:pointer;padding:4px 6px;}
@@ -313,6 +391,14 @@
     <button type="button" class="tab" id="tabSc" data-tab="scplus" aria-selected="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
       <span data-i18n="tab_scplus">Samsung Care+</span>
+    </button>
+    <button type="button" class="tab" id="tabEco" data-tab="eco" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+      <span data-i18n="tab_eco">Eco MBO</span>
+    </button>
+    <button type="button" class="tab" id="tabClips" data-tab="clips" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="10 8 16 12 10 16 10 8"/><rect x="2" y="4" width="20" height="16" rx="3"/></svg>
+      <span data-i18n="tab_clips">Clips</span>
     </button>
   </div>
 
@@ -462,6 +548,229 @@
     <p class="disclaimer" data-i18n="disclaimer">All figures are a simulation for reference only.</p>
    </div><!-- /panel-phone -->
 
+   <div id="panel-eco">
+    <div class="card">
+      <div class="field">
+        <label class="lbl" data-i18n="eco_lbl_model">Eco Product</label>
+
+        <div class="ecocat active" id="catWatch" data-cat="watch">
+          <div class="ecocat-h">
+            <span class="ecocat-t" data-i18n="eco_grp_watch">Galaxy Watch</span>
+            <span class="ecocat-badge" data-i18n="eco_selected">Selected</span>
+          </div>
+          <div class="selectwrap">
+            <select id="selWatch">
+              <option value="0" selected>Galaxy Watch Ultra 2</option>
+              <option value="1">Galaxy Watch9 · 40mm</option>
+              <option value="2">Galaxy Watch9 · 44mm</option>
+              <option value="3">Galaxy Watch8 · 44mm</option>
+              <option value="4">Galaxy Watch8 Classic · 46mm</option>
+              <option value="5">Galaxy Fit3</option>
+            </select>
+          </div>
+          <div class="pctline">
+            <span class="pl" data-i18n="eco_mbo_short">Multi Buy Offer</span>
+            <div class="money">
+              <input id="ecoPctWatch" type="text" inputmode="decimal" placeholder="0">
+              <span class="cur cur-r">%</span>
+            </div>
+          </div>
+          <div class="ecocat-hint" id="hintWatch"></div>
+        </div>
+
+        <div class="ecocat" id="catBuds" data-cat="buds">
+          <div class="ecocat-h">
+            <span class="ecocat-t" data-i18n="eco_grp_buds">Galaxy Buds</span>
+            <span class="ecocat-badge" data-i18n="eco_selected">Selected</span>
+          </div>
+          <div class="selectwrap">
+            <select id="selBuds">
+              <option value="6" selected>Galaxy Buds4 Pro</option>
+              <option value="7">Galaxy Buds4</option>
+              <option value="8">Galaxy Buds3</option>
+              <option value="9">Galaxy Buds3 FE</option>
+            </select>
+          </div>
+          <div class="pctline">
+            <span class="pl" data-i18n="eco_mbo_short">Multi Buy Offer</span>
+            <div class="money">
+              <input id="ecoPctBuds" type="text" inputmode="decimal" placeholder="0">
+              <span class="cur cur-r">%</span>
+            </div>
+          </div>
+          <div class="ecocat-hint" id="hintBuds"></div>
+        </div>
+
+        <div class="ecocat" id="catAcc" data-cat="acc">
+          <div class="ecocat-h">
+            <span class="ecocat-t" data-i18n="eco_grp_acc">Cases &amp; accessories</span>
+            <span class="ecocat-badge" data-i18n="eco_selected">Selected</span>
+          </div>
+          <div class="selectwrap">
+            <select id="selAcc">
+              <option value="10" selected>Charger USB-C 65W</option>
+              <option value="11">Charger USB-C 45W</option>
+              <option value="12">Charger USB-C 25W</option>
+            </select>
+          </div>
+          <div class="pctline">
+            <span class="pl" data-i18n="eco_mbo_short">Multi Buy Offer</span>
+            <div class="money">
+              <input id="ecoPctAcc" type="text" inputmode="decimal" placeholder="0">
+              <span class="cur cur-r">%</span>
+            </div>
+          </div>
+          <div class="ecocat-hint" id="hintAcc"></div>
+        </div>
+
+        <div class="hint" data-i18n="eco_mbo_hint">Discount rate applied when the add-on is bought together with the smartphone.</div>
+      </div>
+
+      <div class="field">
+        <label class="lbl" data-i18n="lbl_term">Financing term (EIP / MSI)</label>
+        <div class="seg seg-term" id="ecoTermToggle">
+          <button type="button" data-term="12" aria-pressed="false">12 mo</button>
+          <button type="button" data-term="18" aria-pressed="false">18 mo</button>
+          <button type="button" data-term="20" aria-pressed="false">20 mo</button>
+          <button type="button" data-term="24" aria-pressed="false">24 mo</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl" data-i18n="lbl_msi">Interest-free months (MSI)?</label>
+        <div class="seg brand" id="ecoMsiToggle">
+          <button type="button" data-msi="yes" aria-pressed="true" data-i18n="msi_yes">Yes</button>
+          <button type="button" data-msi="no" aria-pressed="false" data-i18n="msi_no">No</button>
+        </div>
+        <div id="ecoRateField" style="margin-top:14px;">
+          <label class="lbl" for="ecoRate" data-i18n="lbl_rate">Annual interest rate</label>
+          <div class="money">
+            <input id="ecoRate" type="text" inputmode="decimal" placeholder="Enter annual rate (%)" data-i18n-ph="rate_ph">
+            <span class="cur cur-r" data-i18n="rate_unit">% / yr</span>
+          </div>
+          <div class="hint" data-i18n="rate_hint">The annual rate is divided by 12 and applied to each monthly payment.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card result">
+      <div class="top">
+        <p class="kicker" id="ecoStageLab" data-i18n="eco_res_kicker">ADD TO YOUR PLAN FOR</p>
+        <p class="amount"><span class="cursym" id="ecoPlus">+ MXN</span><span id="ecoMonthly">—</span></p>
+        <p class="cutline" id="ecoStageCut"></p>
+        <p class="term-note"><span id="ecoResultModel">Galaxy Watch Ultra 2</span></p>
+        <p class="term-note" id="ecoTermLine">—</p>
+      </div>
+      <div class="accentbar"></div>
+      <div class="breakdown">
+        <div class="row"><span class="k" data-i18n="bd_rrp">RRP</span><span class="v" id="ecoBRRP">MXN 12,999.00</span></div>
+        <div class="row"><span class="k" data-i18n="eco_bd_mbo">Multi Buy Offer</span><span class="v minus" id="ecoBMbo">– MXN 0.00</span></div>
+        <div class="row total"><span class="k" data-i18n="bd_finance">Amount to finance</span><span class="v" id="ecoBFinance">MXN 12,999.00</span></div>
+        <div class="row" id="ecoBRateRow" style="display:none;"><span class="k" data-i18n="bd_rate">Annual interest rate</span><span class="v" id="ecoBRate">0%</span></div>
+        <div class="row"><span class="k" data-i18n="bd_term">÷ Term</span><span class="v" id="ecoBTerm">—</span></div>
+      </div>
+      <div class="totalstrip">
+        <span class="tl"><span data-i18n="eco_bd_total">Add-on total price</span><small id="ecoTotalNote"></small></span>
+        <span class="tv"><span class="cursym">MXN</span><span id="ecoBTotal">—</span></span>
+      </div>
+    </div>
+
+    <div class="card bundle">
+      <div class="bundle-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3V6a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3v1H4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1z"/></svg>
+        <span data-i18n="bun_title">Your full bundle</span>
+      </div>
+      <div class="bundle-body">
+        <div class="brow" id="bunPhoneRow">
+          <span class="bk"><span data-i18n="tab_smartphone">Smartphone</span><small id="bunPhoneName">—</small></span>
+          <span class="bv" id="bunPhoneVal">—</span>
+        </div>
+        <div class="brow" id="bunScRow">
+          <span class="bk"><span data-i18n="tab_scplus">Samsung Care+</span><small id="bunScName">—</small></span>
+          <span class="bv" id="bunScVal">—</span>
+        </div>
+        <div class="brow" id="bunEcoRow">
+          <span class="bk"><span data-i18n="tab_eco">Eco MBO</span><small id="bunEcoName">—</small></span>
+          <span class="bv" id="bunEcoVal">—</span>
+        </div>
+      </div>
+      <div class="bgrand">
+        <span class="gk"><span data-i18n="bun_permonth">Total per month</span><small id="bunGrandNote"></small></span>
+        <span class="gv"><span class="cursym">MXN</span><span id="bunGrandMonthly">—</span><small id="bunGrandTotal"></small></span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="ecoCopyBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span data-i18n="eco_act_copy">Copy bundle quote</span>
+      </button>
+      <button class="btn" id="ecoShareBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="18" y1="14" x2="21" y2="14"/><line x1="18" y1="18" x2="21" y2="21"/></svg>
+        <span data-i18n="act_share">Share · QR</span>
+      </button>
+      <button class="btn" id="ecoPdfBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+        <span data-i18n="act_pdf">PDF</span>
+      </button>
+      <button class="btn" id="ecoResetBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+        <span data-i18n="act_reset">Reset</span>
+      </button>
+    </div>
+
+    <div class="card salestalk">
+      <div class="st-head">
+        <span class="st-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span data-i18n="eco_st_title">Why this is the better deal</span>
+        </span>
+        <button class="st-copy" id="ecoCopyTalkBtn" data-i18n="st_copy">Copy</button>
+      </div>
+      <p class="st-body" id="ecoSalesTalk"></p>
+    </div>
+
+    <p class="disclaimer" data-i18n="eco_disclaimer">Add-on prices are reference figures and may change without notice.</p>
+   </div><!-- /panel-eco -->
+
+   <div id="panel-clips">
+    <div class="card">
+      <div class="field">
+        <label class="lbl" for="clipModel" data-i18n="clips_lbl_model">Model</label>
+        <div class="selectwrap">
+          <select id="clipModel">
+            <optgroup label="Galaxy S26 Series" id="clipGrpS">
+              <option value="0" selected>Galaxy S26 Ultra · 1TB</option>
+              <option value="1">Galaxy S26 Ultra · 512GB</option>
+              <option value="2">Galaxy S26+ · 512GB</option>
+              <option value="3">Galaxy S26 · 256GB</option>
+              <option value="4">Galaxy S26 FE · 256GB</option>
+            </optgroup>
+            <optgroup label="Galaxy Z Series" id="clipGrpZ">
+              <option value="5">Galaxy Z Fold8 Ultra · 1TB</option>
+              <option value="6">Galaxy Z Fold8 Ultra · 512GB</option>
+              <option value="7">Galaxy Z Fold8 · 512GB</option>
+              <option value="8">Galaxy Z Flip8 · 512GB</option>
+            </optgroup>
+            <optgroup label="Galaxy A Series" id="clipGrpA">
+              <option value="9">Galaxy A57 5G · 256GB</option>
+              <option value="10">Galaxy A37 5G · 128GB</option>
+              <option value="11">Galaxy A27 5G · 128GB</option>
+              <option value="12">Galaxy A18 LTE · 128GB</option>
+              <option value="13">Galaxy A08 LTE · 128GB</option>
+              <option value="14">Galaxy A08 LTE · 64GB</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="hint" data-i18n="clips_hint">Every card opens the clip in a new browser tab — nothing is embedded, so it works on store networks.</div>
+      </div>
+    </div>
+
+    <div id="clipsWrap"></div>
+
+    <p class="disclaimer" data-i18n="clips_disc">Clips were checked on 27 Aug 2026 and change constantly — preview each one before showing it to a customer. TikTok, Instagram and Facebook may be blocked on some corporate networks. Creator content is independent opinion, not official Samsung messaging.</p>
+   </div><!-- /panel-clips -->
+
    <div id="panel-scplus">
     <div class="scdev">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
@@ -531,6 +840,11 @@
   <div><div class="lab" data-i18n="res_kicker">Monthly payment</div><div class="big"><span class="cursym">MXN</span><span id="stickyMonthly">—</span></div></div>
   <div class="rt"><div class="lab" id="stickyModel">Galaxy S26 Ultra · 512GB</div><div class="term" id="stickyTerm">—</div></div>
 </div>
+<div class="sticky" id="stickyEco" style="display:none;">
+  <div><div class="lab" data-i18n="eco_sticky_lab">Add-on / month</div><div class="big"><span class="cursym">+ MXN</span><span id="stickyEcoMonthly">—</span></div></div>
+  <div class="rt"><div class="lab" data-i18n="bun_permonth">Total per month</div><div class="term" id="stickyEcoGrand">—</div></div>
+</div>
+
 <div class="sticky" id="stickySc" style="display:none;">
   <div><div class="lab" data-i18n="sc_sticky_lab">Samsung Care+</div><div class="big"><span class="cursym">MXN</span><span id="stickyScPrice">—</span><span id="stickyScUnit" style="font-size:13px;color:#C7CBD6;margin-left:4px;"></span></div></div>
   <div class="rt"><div class="lab" id="stickyScModel">Galaxy S26 Ultra · 512GB</div><div class="term" id="stickyScPlan">—</div></div>
@@ -575,6 +889,16 @@
       <div id="qrWarn" class="qr-warn" style="display:none;"></div>
       <div class="qrframe" id="qrHolder"></div>
       <p class="qr-cap" id="qrCap"></p>
+      <div class="qr-send">
+        <a id="sendWa" class="send-btn wa" role="button" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.03c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.13-.96-.31-1.66-.61-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.24-.27.53-.34.71-.34.18 0 .35.002.51.01.16.008.39-.06.6.46.24.56.79 1.94.86 2.08.07.14.12.31.02.51-.09.2-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.56.16.27.71 1.16 1.52 1.89 1.04.92 1.9 1.21 2.17 1.35.27.14.42.12.58-.07.16-.19.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.27.13.44.2.51.31.07.11.07.63-.17 1.31z"/></svg>
+          <span data-i18n="send_wa">WhatsApp</span>
+        </a>
+        <a id="sendSms" class="send-btn sms" role="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+          <span data-i18n="send_sms">SMS</span>
+        </a>
+      </div>
       <div class="qr-link">
         <input id="qrLink" type="text" readonly>
         <button id="qrCopyLink" data-i18n="qr_copy">Copy</button>
@@ -2969,6 +3293,157 @@ var qrcode = function() {
   };
   // model index (MODELS order) -> SC_PLANS key
   // model index (MODELS order) -> SC_PLANS key. null = Care+ not offered for that model.
+  // ---------- Social clips per model (data mirrored from the FSM Spec/Influencer tool) ----------
+  var CLIP_SETS = {
+    s26ultra: [
+      { t:{en:"Privacy Display",es:"Privacy Display"},
+        en:[{k:"yt",p:1,u:"https://www.youtube.com/watch?v=kViZiLlTSkY",t:"Galaxy S26 Ultra: Privacy Display — official film",c:"Samsung · YouTube",d:"checkLive"},{k:"ig",p:1,u:"https://www.instagram.com/p/DVcRGpej8mI",t:"Privacy Display · #TeamGalaxy",c:"Instagram creator",d:"checkLive"}],
+        es:[{k:"yt",p:1,u:"https://www.youtube.com/watch?v=kViZiLlTSkY",t:"Galaxy S26 Ultra: Privacy Display — film oficial",c:"Samsung · YouTube",d:"checkLive"},{k:"ig",p:1,u:"https://www.instagram.com/p/DVcRGpej8mI",t:"Privacy Display · #TeamGalaxy",c:"Creador de Instagram",d:"checkLive"}] },
+      { t:{en:"Nightography",es:"Nightography"},
+        en:[{k:"tt",p:1,u:"https://www.tiktok.com/@haleyybaylee/video/7655828472505306381",t:"Nightography night out · #TeamGalaxy",c:"Haley Baylee · @haleyybaylee",d:"checkLive"}],
+        es:[{k:"tt",p:1,u:"https://www.tiktok.com/@haleyybaylee/video/7655828472505306381",t:"Nightography de noche · #TeamGalaxy",c:"Haley Baylee · @haleyybaylee",d:"checkLive"}] },
+      { t:{en:"Super Steady & Photo Assist",es:"Super Steady y Photo Assist"},
+        en:[{k:"yt",p:1,u:"https://www.youtube.com/watch?v=xn38oWudMxw",t:"Super Steady & Photo Assist — official film",c:"Samsung · YouTube",d:"checkLive"}],
+        es:[{k:"yt",p:1,u:"https://www.youtube.com/watch?v=xn38oWudMxw",t:"Super Steady y Photo Assist — film oficial",c:"Samsung · YouTube",d:"checkLive"}] },
+      { t:{en:"Gaming",es:"Gaming"},
+        en:[{k:"yt",p:1,u:"https://www.youtube.com/shorts/pppKPcI-KxM",t:"The Samsung Galaxy S26 Ultra is a Gaming Beast!",c:"YouTube Shorts",d:"<60s"}],
+        es:[{k:"yt",p:1,u:"https://www.youtube.com/shorts/pppKPcI-KxM",t:"The Samsung Galaxy S26 Ultra is a Gaming Beast!",c:"YouTube Shorts",d:"<60s"}] }
+    ],
+    s26plus: [
+      { t:{en:"Nightography",es:"Nightography"},
+        en:[{k:"tt",p:1,u:"https://www.tiktok.com/@haleyybaylee/video/7655828472505306381",t:"Nightography night out · #TeamGalaxy",c:"Haley Baylee · @haleyybaylee · filmed on S26 Ultra",d:"checkLive"}],
+        es:[{k:"tt",p:1,u:"https://www.tiktok.com/@haleyybaylee/video/7655828472505306381",t:"Nightography de noche · #TeamGalaxy",c:"Haley Baylee · @haleyybaylee · filmed on S26 Ultra",d:"checkLive"}] },
+      { t:{en:"Super Steady & Photo Assist",es:"Super Steady y Photo Assist"},
+        en:[{k:"yt",p:1,u:"https://www.youtube.com/watch?v=xn38oWudMxw",t:"Super Steady & Photo Assist — official film (S26 Ultra)",c:"Samsung · YouTube",d:"checkLive"}],
+        es:[{k:"yt",p:1,u:"https://www.youtube.com/watch?v=xn38oWudMxw",t:"Super Steady y Photo Assist — film oficial (S26 Ultra)",c:"Samsung · YouTube",d:"checkLive"}] }
+    ],
+    s26: [
+      { t:{en:"Nightography",es:"Nightography"},
+        en:[{k:"tt",p:1,u:"https://www.tiktok.com/@haleyybaylee/video/7655828472505306381",t:"Nightography night out · #TeamGalaxy",c:"Haley Baylee · @haleyybaylee · filmed on S26 Ultra",d:"checkLive"}],
+        es:[{k:"tt",p:1,u:"https://www.tiktok.com/@haleyybaylee/video/7655828472505306381",t:"Nightography de noche · #TeamGalaxy",c:"Haley Baylee · @haleyybaylee · filmed on S26 Ultra",d:"checkLive"}] },
+      { t:{en:"Super Steady & Photo Assist",es:"Super Steady y Photo Assist"},
+        en:[{k:"yt",p:1,u:"https://www.youtube.com/watch?v=xn38oWudMxw",t:"Super Steady & Photo Assist — official film (S26 Ultra)",c:"Samsung · YouTube",d:"checkLive"}],
+        es:[{k:"yt",p:1,u:"https://www.youtube.com/watch?v=xn38oWudMxw",t:"Super Steady y Photo Assist — film oficial (S26 Ultra)",c:"Samsung · YouTube",d:"checkLive"}] }
+    ],
+    s25fe: [
+      { t:{en:"Flagship-like experience at a much lower price",es:"Experiencia tipo insignia a un precio mucho menor"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20worth%20it%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: S25 FE value verdicts",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20vale%20la%20pena%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: ¿vale la pena el S25 FE?",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Gorgeous 6.7″ AMOLED at 120Hz",es:"Preciosa AMOLED de 6.7″ a 120Hz"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20display%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: the S25 FE display",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20pantalla%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: pantalla del S25 FE",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"50MP triple camera with real 3x optical zoom",es:"Triple cámara de 50MP con zoom óptico 3x real"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20camera%20test%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: S25 FE camera tests",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20c%C3%A1mara%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: cámara del S25 FE",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"IP68 + 7 years of Android updates",es:"IP68 + 7 años de actualizaciones de Android"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20IP68%20updates%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: S25 FE durability & updates",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20actualizaciones%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: soporte del S25 FE",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Galaxy AI included — Now Brief, Circle to Search",es:"Galaxy AI incluido: Now Brief, Circle to Search"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20Now%20Brief%20AI%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: Now Brief on the S25 FE",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20S25%20FE%20IA%20funciones%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: IA del S25 FE",c:"YouTube Shorts · en vivo",d:"<60s"}] }
+    ],
+    zfold8ultra: [
+      { t:{en:"The first “Ultra” foldable — a statement device",es:"El primer plegable “Ultra”: un dispositivo de estatus"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20Z%20Fold8%20Ultra%20hands%20on%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: Fold8 Ultra hands-on",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20Z%20Fold8%20Ultra%20primeras%20impresiones%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: Fold8 Ultra",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Flex Titanium — the crease practically disappears",es:"Flex Titanium: el pliegue casi desaparece"},
+        en:[{k:"yt",u:"https://www.youtube.com/shorts/drVtBOoMKKs",t:"Z Fold 8 Ultra Hands-on Review (Shorts)",c:"Tech reviewer · Shorts",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Fold8%20Ultra%20pliegue%20Flex%20Titanium%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: pliegue del Fold8 Ultra",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"8″ workstation: 2–3 apps side by side",es:"Estación de trabajo de 8″: 2–3 apps a la vez"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Fold8%20Ultra%20multitasking%20split%20screen%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: Fold8 Ultra multitasking",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Fold8%20Ultra%20multitarea%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: multitarea",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Impossibly thin: 4.1mm open, 8.9mm closed",es:"Increíblemente delgado: 4.1mm abierto, 8.9mm cerrado"},
+        en:[{k:"ig",u:"https://www.instagram.com/p/DbQAvWuEel7/",t:"Galaxy Z Fold8 / Fold8 Ultra / Flip8 hands-on post",c:"Instagram creator",d:"Reel"},{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Fold8%20Ultra%20thin%20design%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: how thin is the Fold8 Ultra",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Fold8%20Ultra%20delgado%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: grosor del Fold8 Ultra",c:"YouTube Shorts · en vivo",d:"<60s"}] }
+    ],
+    zfold8: [
+      { t:{en:"A whole new foldable format — made for content",es:"Un formato plegable totalmente nuevo, hecho para contenido"},
+        en:[{k:"ig",u:"https://www.instagram.com/reel/DbHexwGRui5/",t:"Early look at the Galaxy Z8 Series — Flip or Fold? (Unpacked Reel)",c:"Instagram creator · Unpacked 2026",d:"Reel"},{k:"yt",u:"https://www.youtube.com/shorts/mYaCIPDe1g0",t:"Z Fold 8 Wide Hands-On: All New Aspect Ratio!",c:"Tech reviewer · Shorts",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20Z%20Fold8%20nuevo%20formato%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: nuevo formato del Fold8",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Lightest Fold ever: just 201 g",es:"El Fold más ligero de la historia: solo 201 g"},
+        en:[{k:"ig",u:"https://www.instagram.com/explore/search/keyword/?q=galaxy%20z%20fold8%20day%20in%20the%20life",t:"Reels: a day in the life with the Fold8 (201g)",c:"Instagram Reels · live search",d:"Reel"},{k:"yt",u:"https://www.youtube.com/shorts/1ZqqHEh6OsY",t:"Z Fold 8: Hands on with my dream foldable!",c:"Tech reviewer · Shorts",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20Z%20Fold8%20201%20gramos%20ligero%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: 201 g del Fold8",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Flex Titanium — barely-there crease",es:"Flex Titanium: pliegue casi imperceptible"},
+        en:[{k:"ig",u:"https://www.instagram.com/explore/search/keyword/?q=galaxy%20z%20fold8%20lavender",t:"Reels: lavender Fold8 aesthetic + crease looks",c:"Instagram Reels · live search",d:"Reel"},{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Fold8%20crease%20check%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: Fold8 crease checks",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Fold8%20pliegue%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: pliegue del Fold8",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Real multitasking: 2–3 apps side by side",es:"Multitarea real: 2–3 apps a la vez"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Fold8%20split%20screen%20multitasking%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: Fold8 split-view demos",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Fold8%20multitarea%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: multitarea",c:"YouTube Shorts · en vivo",d:"<60s"}] }
+    ],
+    zflip8: [
+      { t:{en:"The style statement — including the new pink",es:"El statement de estilo, incluido el nuevo rosa"},
+        en:[{k:"yt",u:"https://www.youtube.com/shorts/jcYogCKFzms",t:"PINK Z Flip 8!! OMG! 💕🎀",c:"Creator Shorts",d:"<60s"},{k:"yt",u:"https://www.youtube.com/shorts/Xid6eE450HE",t:"Z Flip 8 (pink) Unboxing! #shorts — “this color is stunning”",c:"Creator Shorts",d:"<60s"}],
+        es:[{k:"ig",u:"https://www.instagram.com/explore/search/keyword/?q=galaxy%20z%20flip8%20rosa",t:"Reels ES: Flip8 rosa — unboxings de creadoras",c:"Instagram Reels · live search",d:"Reel"},{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20Z%20Flip8%20rosa%20unboxing%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: Flip8 rosa",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"FlexWindow selfies with the main 50MP camera",es:"Selfies en FlexWindow con la cámara principal de 50MP"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Flip8%20FlexWindow%20selfie%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: FlexWindow selfies",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Flip8%20selfie%20FlexWindow%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: selfies del Flip8",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Folds to half the size — 180g, truly pocketable",es:"Se pliega a la mitad: 180g, cabe en cualquier bolsillo"},
+        en:[{k:"yt",u:"https://www.youtube.com/shorts/4BqKe5xDyXA",t:"Z Flip8: trendy, stylish, a true pocket phone",c:"Creator Shorts",d:"<60s"},{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Flip8%20pocket%20size%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: how pocketable is the Flip8",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Flip8%20tama%C3%B1o%20bolsillo%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: portabilidad del Flip8",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Bigger 4,300mAh battery — up to 31 hours of video",es:"Batería mayor de 4,300mAh: hasta 31 horas de video"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Flip8%20battery%20test%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: Flip8 battery tests",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Flip8%20bater%C3%ADa%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: batería del Flip8",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"The affordable door into foldables",es:"La puerta accesible a los plegables"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Flip8%20worth%20it%20price%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: is the Flip8 worth it",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Z%20Flip8%20precio%20vale%20la%20pena%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: ¿vale la pena el Flip8?",c:"YouTube Shorts · en vivo",d:"<60s"}] }
+    ],
+    a57: [
+      { t:{en:"Slim premium design + 6.7″ 120Hz Super AMOLED",es:"Diseño delgado premium + Super AMOLED 6.7″ 120Hz"},
+        en:[{k:"yt",u:"https://www.youtube.com/shorts/xejJLyH0VFE",t:"Galaxy A57 Unboxing (Awesome Gray) — Shorts",c:"Tech reviewer · Shorts",d:"<60s"}],
+        es:[{k:"yt",u:"https://www.youtube.com/shorts/tnpqFaLd60Q",t:"Galaxy A57 5G | Review rápido — Shorts en español",c:"Reviewer ES/MX · Shorts",d:"<60s"}] },
+      { t:{en:"Awesome Intelligence — real AI at this price",es:"Awesome Intelligence: IA real a este precio"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A57%20Awesome%20Intelligence%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: AI demos on the A57",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A57%20Awesome%20Intelligence%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: IA del A57",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"50MP triple camera with better night shots",es:"Triple cámara de 50MP con mejores fotos nocturnas"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A57%20camera%20test%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: A57 camera tests",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A57%20c%C3%A1mara%20prueba%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: cámara del A57",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Up to 2-day battery",es:"Batería de hasta 2 días"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A57%20battery%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: A57 battery life",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A57%20bater%C3%ADa%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: batería del A57",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"IP68 + 6 years of OS & security updates",es:"IP68 + 6 años de actualizaciones"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A57%20IP68%20updates%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: A57 durability",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A57%20actualizaciones%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: soporte del A57",c:"YouTube Shorts · en vivo",d:"<60s"}] }
+    ],
+    a37: [
+      { t:{en:"The most phone for the money in the lineup",es:"El teléfono que más da por el dinero"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%205G%20review%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: Galaxy A37 reviews",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%205G%20rese%C3%B1a%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: reseñas del A37",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Long battery life with an efficient chip",es:"Larga duración de batería con un chip eficiente"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%20battery%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: A37 battery",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%20bater%C3%ADa%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: batería del A37",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"IP68 + up to 6 years of updates",es:"IP68 + hasta 6 años de actualizaciones"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%20updates%20IP68%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: A37 durability & updates",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%20actualizaciones%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: soporte del A37",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Awesome Intelligence on a budget phone",es:"Awesome Intelligence en un teléfono económico"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%20Circle%20to%20Search%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: AI on the A37",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%20IA%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: IA del A37",c:"YouTube Shorts · en vivo",d:"<60s"}] },
+      { t:{en:"Big, bright Super AMOLED for video and social",es:"Super AMOLED grande y brillante para video y redes"},
+        en:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%20display%20%23shorts&sp=CAMSAhAB",t:"Top Shorts: the A37 display",c:"YouTube Shorts · live",d:"<60s"}],
+        es:[{k:"link",u:"https://www.youtube.com/results?search_query=Galaxy%20A37%20pantalla%20espa%C3%B1ol%20%23shorts&sp=CAMSAhAB",t:"Top Shorts ES: pantalla del A37",c:"YouTube Shorts · en vivo",d:"<60s"}] }
+    ]
+  };
+
+  // Liverpool model index -> clip set (null = no clips mapped yet)
+  var CLIP_MAP = [
+    {s:"s26ultra"}, {s:"s26ultra"}, {s:"s26plus"}, {s:"s26"}, {s:"s25fe",n:"fe"}, {s:"zfold8ultra"}, {s:"zfold8ultra"}, {s:"zfold8"}, {s:"zflip8"}, {s:"a57"}, {s:"a37"}, null, null, null, null
+  ];
+  // Add-on catalogue (Watch / Buds / accessories). custom:true -> price typed by the user.
+  var ECO_MODELS = [
+    {name:"Galaxy Watch Ultra 2",        price:12999, cat:"watch"},
+    {name:"Galaxy Watch9 · 40mm",        price:6999,  cat:"watch"},
+    {name:"Galaxy Watch9 · 44mm",        price:7499,  cat:"watch"},
+    {name:"Galaxy Watch8 · 44mm",        price:6099,  cat:"watch"},
+    {name:"Galaxy Watch8 Classic · 46mm",price:9499,  cat:"watch"},
+    {name:"Galaxy Fit3",                 price:999,   cat:"watch"},
+    {name:"Galaxy Buds4 Pro",            price:4599,  cat:"buds"},
+    {name:"Galaxy Buds4",                price:3299,  cat:"buds"},
+    {name:"Galaxy Buds3",                price:2899,  cat:"buds"},
+    {name:"Galaxy Buds3 FE",             price:2499,  cat:"buds"},
+    {name:"Charger USB-C 65W",           price:1259,  cat:"acc"},
+    {name:"Charger USB-C 45W",           price:629,   cat:"acc"},
+    {name:"Charger USB-C 25W",           price:339,   cat:"acc"}
+  ];
+
   var SC_MAP = ["s26u","s26u","s26","s26",null,
                 "zfu1tb","zfu512","zf512","zflip512",
                 null,null,null,null,null,null];
@@ -2985,6 +3460,34 @@ var qrcode = function() {
       sc_pay_label:"Payment option",
       sc_bd_plan:"Plan", sc_bd_pay:"Payment option", sc_bd_cover:"Coverage period", sc_bd_price:"Care+ price",
       sc_act_copy:"Copy Care+ quote",
+      tab_clips:"Clips", clips_lbl_model:"Model",
+      clips_hint:"Every card opens the clip in a new browser tab — nothing is embedded, so it works on store networks.",
+      clips_disc:"Clips were checked on 27 Aug 2026 and change constantly — preview each one before showing it to a customer. TikTok, Instagram and Facebook may be blocked on some corporate networks. Creator content is independent opinion, not official Samsung messaging.",
+      clip_official:"Official #TeamGalaxy", clip_search:"YT Search", clip_check:"check runtime live",
+      clip_one:"clip", clip_many:"clips",
+      clip_none:"No social clips are mapped to the {n} yet. Pick another model, or use the Smartphone tab to build the quote.",
+      clip_note_fe:"FE-series content: these clips were filmed on the Galaxy S25 FE and cover the same selling points.",
+      tab_eco:"Eco MBO",
+      eco_lbl_model:"Eco Product",
+      eco_custom_lbl:"Accessory price", eco_custom_ph:"Enter price",
+      eco_custom_hint:"For cases, chargers, covers and other accessories not in the list.",
+      eco_lbl_mbo:"Multi Buy Offer — bundle discount by category",
+      eco_mbo_hint:"Discount rate applied when the add-on is bought together with the smartphone.",
+      eco_mbo_short:"Multi Buy Offer", eco_selected:"Selected",
+      eco_cat_hint:"RRP {r}", eco_cat_hint_off:"RRP {r} → {f} · {p}% off, saves MXN {v}",
+      eco_res_kicker:"ADD TO YOUR PLAN FOR",
+      eco_bd_mbo:"Multi Buy Offer", eco_bd_total:"Add-on total price",
+      eco_grp_watch:"Galaxy Watch", eco_grp_buds:"Galaxy Buds", eco_grp_acc:"Cases & accessories",
+      eco_acc_opt:"Other case / accessory · enter price",
+      eco_sticky_lab:"Add-on / month",
+      eco_st_title:"Why this is the better deal",
+      eco_act_copy:"Copy bundle quote",
+      eco_disclaimer:"Add-on prices are reference figures and may change without notice. Multi Buy Offer discounts depend on the promotion active in store.",
+      eco_q_title:"Galaxy Add-on & Bundle — Liverpool", eco_q_addon:"Add-on", eco_q_monthly:"Add-on monthly payment",
+      bun_title:"Your full bundle", bun_permonth:"Total per month", bun_total:"Total cost:",
+      bun_none:"Not selected", bun_once:"one-time", bun_once_note:"+ MXN {v} one-time",
+      u_mo_lbl:"per month",
+      tn_msi:"interest-free (MSI)", tn_rate:"annual interest",
       st_title:"Why this plan works for you", st_copy:"Copy",
       sc_st_title:"Why Care+ makes sense for you",
       sc_sticky_lab:"Samsung Care+",
@@ -3123,6 +3626,34 @@ var qrcode = function() {
       bd_finance:"Monto a financiar", bd_rate:"Tasa de interés anual",
       bd_term:"÷ Plazo", bd_total:"Precio total",
       act_copy:"Copiar", act_print:"Imprimir", act_reset:"Reiniciar",
+      tab_clips:"Clips", clips_lbl_model:"Modelo",
+      clips_hint:"Cada tarjeta abre el clip en una pestaña nueva — nada se incrusta, así funciona en las redes de la tienda.",
+      clips_disc:"Los clips se verificaron el 27 de agosto de 2026 y cambian constantemente: revisa cada uno antes de mostrarlo a un cliente. TikTok, Instagram y Facebook pueden estar bloqueados en algunas redes corporativas. El contenido de creadores es opinión independiente, no mensajería oficial de Samsung.",
+      clip_official:"Oficial #TeamGalaxy", clip_search:"Búsqueda YT", clip_check:"verificar en vivo",
+      clip_one:"clip", clip_many:"clips",
+      clip_none:"Todavía no hay clips asignados al {n}. Elige otro modelo o usa la pestaña Smartphone para armar la cotización.",
+      clip_note_fe:"Contenido de la serie FE: estos clips se grabaron con el Galaxy S25 FE y cubren los mismos argumentos.",
+      tab_eco:"Eco MBO",
+      eco_lbl_model:"Producto Eco",
+      eco_custom_lbl:"Precio del accesorio", eco_custom_ph:"Ingresa el precio",
+      eco_custom_hint:"Para fundas, cargadores, cubiertas y otros accesorios que no están en la lista.",
+      eco_lbl_mbo:"Multi Buy Offer — descuento por categoría",
+      eco_mbo_hint:"Tasa de descuento que aplica al llevar el accesorio junto con el smartphone.",
+      eco_mbo_short:"Multi Buy Offer", eco_selected:"Seleccionado",
+      eco_cat_hint:"PVP {r}", eco_cat_hint_off:"PVP {r} → {f} · {p}% menos, ahorras MXN {v}",
+      eco_res_kicker:"AGRÉGALO A TU PLAN POR",
+      eco_bd_mbo:"Multi Buy Offer", eco_bd_total:"Precio total del accesorio",
+      eco_grp_watch:"Galaxy Watch", eco_grp_buds:"Galaxy Buds", eco_grp_acc:"Fundas y accesorios",
+      eco_acc_opt:"Otra funda / accesorio · ingresa el precio",
+      eco_sticky_lab:"Accesorio / mes",
+      eco_st_title:"Por qué te conviene más",
+      eco_act_copy:"Copiar cotización",
+      eco_disclaimer:"Los precios de accesorios son cifras de referencia y pueden cambiar sin previo aviso. Los descuentos Multi Buy Offer dependen de la promoción vigente en tienda.",
+      eco_q_title:"Accesorio Galaxy y paquete — Liverpool", eco_q_addon:"Accesorio", eco_q_monthly:"Pago mensual del accesorio",
+      bun_title:"Tu paquete completo", bun_permonth:"Total por mes", bun_total:"Costo total:",
+      bun_none:"Sin seleccionar", bun_once:"pago único", bun_once_note:"+ MXN {v} pago único",
+      u_mo_lbl:"por mes",
+      tn_msi:"sin intereses (MSI)", tn_rate:"de interés anual",
       st_title:"Por qué te conviene este plan", st_copy:"Copiar",
       disclaimer:"Todas las cifras son una simulación solo para referencia. La transacción final se rige por el sistema POS de Liverpool, el resultado de la inspección del equipo, las condiciones de la promoción vigente, el método de pago y las políticas de la tienda.",
       toast_quote:"Cotización copiada", toast_talk:"Argumento copiado", toast_reset:"Reiniciado", toast_fail:"Error al copiar",
@@ -3168,7 +3699,8 @@ var qrcode = function() {
 
   var state = { lang:"en", tab:"phone", modelIdx:0, rrp:MODELS[0].price, modelName:MODELS[0].name,
                 tradeOn:false, tradein:0, promo:0, term:null, msi:true, rate:0,
-                scPlan:null, scPay:null };
+                scPlan:null, scPay:null,
+                ecoCat:"watch", ecoSel:{watch:0,buds:6,acc:10}, ecoPct:{watch:0,buds:0,acc:0}, ecoTerm:null, ecoMsi:true, ecoRate:0, ecoMsiTouched:false };
 
   // ---- Restore state from URL (QR / shared link) ----
   (function restoreFromURL(){
@@ -3184,6 +3716,17 @@ var qrcode = function() {
       if(q.get("msi")==="0"){ state.msi=false; state.rate=parseFloat(q.get("r"))||0; }
       var sp=q.get("sp"); if(sp){ state.scPlan=sp; state.scPay=q.get("spy")||null; }
       if(q.get("tab")==="scplus") state.tab="scplus";
+      if(q.get("tab")==="eco") state.tab="eco";
+      if(q.get("tab")==="clips") state.tab="clips";
+      var ei=parseInt(q.get("e"),10);
+      if(!isNaN(ei) && ei>=0 && ei<ECO_MODELS.length){
+        var mm=ECO_MODELS[ei]; state.ecoCat=mm.cat; state.ecoSel[mm.cat]=ei;
+      }
+      if(q.get("pw")) state.ecoPct.watch=parseFloat(q.get("pw"))||0;
+      if(q.get("pb")) state.ecoPct.buds=parseFloat(q.get("pb"))||0;
+      if(q.get("pa")) state.ecoPct.acc=parseFloat(q.get("pa"))||0;
+      var et=parseInt(q.get("et"),10); if([12,18,20,24].indexOf(et)>=0) state.ecoTerm=et;
+      if(q.get("emsi")==="0"){ state.ecoMsi=false; state.ecoRate=parseFloat(q.get("er"))||0; state.ecoMsiTouched=true; }
     }catch(e){}
   })();
 
@@ -3217,6 +3760,16 @@ var qrcode = function() {
     if(state.promo>0) p.push("pr="+state.promo);
     if(!state.msi){ p.push("msi=0"); if(state.rate>0) p.push("r="+state.rate); }
     if((forTab==="scplus") && state.scPlan){ p.push("sp="+state.scPlan); if(state.scPay) p.push("spy="+state.scPay); }
+    if(forTab==="eco"){
+      p.push("e="+ecoIdx());
+      if(state.ecoPct.watch>0) p.push("pw="+state.ecoPct.watch);
+      if(state.ecoPct.buds>0)  p.push("pb="+state.ecoPct.buds);
+      if(state.ecoPct.acc>0)   p.push("pa="+state.ecoPct.acc);
+      if(state.ecoTerm) p.push("et="+state.ecoTerm);
+      if(!state.ecoMsi){ p.push("emsi=0"); if(state.ecoRate>0) p.push("er="+state.ecoRate); }
+      // keep the phone + Care+ context so the bundle total survives the link
+      if(state.scPlan){ p.push("sp="+state.scPlan); if(state.scPay) p.push("spy="+state.scPay); }
+    }
     p.push("tab="+(forTab||state.tab));
     return base + "?" + p.join("&");
   }
@@ -3516,11 +4069,18 @@ var qrcode = function() {
   function switchTab(tab){
     state.tab=tab;
     document.body.classList.toggle("tab-scplus", tab==="scplus");
+    document.body.classList.toggle("tab-eco", tab==="eco");
+    document.body.classList.toggle("tab-clips", tab==="clips");
     $("tabPhone").setAttribute("aria-selected", tab==="phone"?"true":"false");
     $("tabSc").setAttribute("aria-selected", tab==="scplus"?"true":"false");
+    $("tabEco").setAttribute("aria-selected", tab==="eco"?"true":"false");
+    $("tabClips").setAttribute("aria-selected", tab==="clips"?"true":"false");
     $("stickyPhone").style.display = tab==="phone"?"flex":"none";
     $("stickySc").style.display = tab==="scplus"?"flex":"none";
+    $("stickyEco").style.display = tab==="eco"?"flex":"none";
     if(tab==="scplus"){ buildScOptions(); renderSc(); }
+    if(tab==="eco"){ renderEco("settle"); }
+    if(tab==="clips"){ renderClips(); }
   }
 
   /* ---------- Share / QR modal ---------- */
@@ -3804,6 +4364,325 @@ var qrcode = function() {
     $("rrpHint").textContent = "MXN " + fmt0(state.rrp);
 
     updateAmount(reason, delay, r);
+    if(typeof renderEco === "function" && $("bunPhoneVal")) renderEco("settle");
+  }
+
+
+  /* ================= Add-ons (eco) tab ================= */
+  var ecoToken = 0, ecoTimer = null, ecoShown = null;
+
+  function ecoIdx(){ var i = state.ecoSel[state.ecoCat]; return (i>=0 && i<ECO_MODELS.length) ? i : 0; }
+  function ecoModel(){ return ECO_MODELS[ecoIdx()] || ECO_MODELS[0]; }
+  function ecoPrice(){ return ecoModel().price; }
+
+  function pctTxt(v){ return String(Math.round(v*100)/100); }
+  function ecoCat(){ return state.ecoCat || "acc"; }
+  function ecoPctValue(){ var v = state.ecoPct[ecoCat()]; return v > 0 ? Math.min(v, 100) : 0; }
+
+  function ecoCompute(){
+    var rrp = ecoPrice();
+    var pct = ecoPctValue();
+    var mbo = rrp * (pct/100);
+    var finance = rrp - mbo; if(finance < 0) finance = 0;
+    var hasTerm = state.ecoTerm > 0;
+    var withInterest = (!state.ecoMsi && state.ecoRate > 0);
+    var monthly = 0;
+    if(hasTerm){
+      if(withInterest){
+        var r = (state.ecoRate/100)/12;
+        monthly = finance * r / (1 - Math.pow(1+r, -state.ecoTerm));
+      } else {
+        monthly = finance/state.ecoTerm;
+      }
+    }
+    return { rrp:rrp, pct:pct, mbo:mbo, finance:finance, monthly:monthly,
+             total: hasTerm ? monthly*state.ecoTerm : 0,
+             hasTerm:hasTerm, withInterest:withInterest };
+  }
+
+  function ecoTween(from, to, dur, my){
+    if(reduceMotion || dur <= 0){ ecoShown = to; $("ecoMonthly").textContent = fmt(to); return; }
+    var start = null;
+    function step(ts){
+      if(my !== ecoToken) return;
+      if(start === null) start = ts;
+      var pr = Math.min(1, (ts-start)/dur);
+      var e = 1 - Math.pow(1-pr, 3);
+      ecoShown = from + (to-from)*e;
+      $("ecoMonthly").textContent = fmt(ecoShown);
+      if(pr < 1){ requestAnimationFrame(step); }
+      else { ecoShown = to; $("ecoMonthly").textContent = fmt(to); }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Care+ contribution to the bundle: {monthly, once, total, label}
+  function scContribution(){
+    var sel = scSelected();
+    if(!sel) return { monthly:0, once:0, total:0, label:null };
+    var isMonthly = sel.pay.key === "monthly";
+    var label = t(PROD_META[sel.plan.id].name) + " · " + t(scPayMeta(sel.pay.key).lab);
+    if(isMonthly) return { monthly:sel.pay.price, once:0, total:sel.pay.price*24, label:label };
+    return { monthly:0, once:sel.pay.price, total:sel.pay.price, label:label };
+  }
+
+  function bundleTotals(){
+    var ph = compute(), ec = ecoCompute(), sc = scContribution();
+    return {
+      phone:ph, eco:ec, sc:sc,
+      monthly: (ph.hasTerm ? ph.monthly : 0) + (ec.hasTerm ? ec.monthly : 0) + sc.monthly,
+      once: sc.once,
+      total: (ph.hasTerm ? ph.total : 0) + (ec.hasTerm ? ec.total : 0) + sc.total
+    };
+  }
+
+  function ecoSalesTalk(r, b){
+    var name = ecoModel().name.replace(/\s·\s/g, " ");
+    var phoneName = state.modelName.replace(/\s·\s/g, " ");
+    var es = state.lang === "es";
+
+    if(!r.hasTerm){
+      var save0 = r.mbo > 0
+        ? (es ? " Ahorras MXN " + fmt(r.mbo) + " (" + pctTxt(r.pct) + "% menos) por llevarlo en paquete."
+              : " You save MXN " + fmt(r.mbo) + " (" + pctTxt(r.pct) + "% off) by bundling it.")
+        : "";
+      return (es ? "Elige el plazo y te digo cuánto más por mes cuesta llevarte el " + name + " con tu " + phoneName + "."
+                 : "Pick a term and I'll show how much more per month it takes to add the " + name + " to your " + phoneName + ".") + save0;
+    }
+
+    var perDay = r.monthly/30, out = [];
+    if(es){
+      if(r.mbo > 0){
+        out.push("Llevándolo en paquete, el " + name + " te sale en MXN " + fmt(r.finance) + " en lugar de MXN " + fmt(r.rrp) + ": ahorras MXN " + fmt(r.mbo) + ", un " + pctTxt(r.pct) + "% menos.");
+        out.push("Ese precio solo aplica al llevarlo junto con tu " + phoneName + "; comprándolo después pagarías el precio completo.");
+      } else {
+        out.push("El " + name + " se suma a tu plan sin complicarte: todo en una sola mensualidad.");
+      }
+      out.push("Son MXN " + fmt(r.monthly) + " al mes, unos MXN " + fmt(perDay) + " al día" + (r.withInterest ? "" : " y sin intereses") + ".");
+      if(b.monthly > 0) out.push("Con tu " + phoneName + " y todo incluido, quedas en MXN " + fmt(b.monthly) + " al mes.");
+    } else {
+      if(r.mbo > 0){
+        out.push("Bundled today, the " + name + " comes to MXN " + fmt(r.finance) + " instead of MXN " + fmt(r.rrp) + " — you keep MXN " + fmt(r.mbo) + " in your pocket, " + pctTxt(r.pct) + "% off.");
+        out.push("That price only applies when you take it with your " + phoneName + "; buying it later means paying full price.");
+      } else {
+        out.push("The " + name + " simply joins your plan — one single monthly payment for everything.");
+      }
+      out.push("It works out to MXN " + fmt(r.monthly) + " a month, about MXN " + fmt(perDay) + " a day" + (r.withInterest ? "" : ", interest-free") + ".");
+      if(b.monthly > 0) out.push("With your " + phoneName + " and everything included, you're at MXN " + fmt(b.monthly) + " a month.");
+    }
+    return out.join(" ");
+  }
+
+  // Add-on financing follows the smartphone tab until the user changes it here
+  function applyEcoMsiUI(){
+    Array.prototype.forEach.call($("ecoMsiToggle").children, function(b){
+      b.setAttribute("aria-pressed", (b.getAttribute("data-msi")==="yes") === !!state.ecoMsi ? "true" : "false");
+    });
+    $("ecoRateField").classList.toggle("show", !state.ecoMsi);
+    $("ecoRate").value = state.ecoRate ? String(state.ecoRate) : "";
+  }
+
+  function syncEcoMsiFromPhone(){
+    if(state.ecoMsiTouched) return;
+    state.ecoMsi = state.msi;
+    state.ecoRate = state.rate;
+    applyEcoMsiUI();
+  }
+
+  function renderEco(reason, delay){
+    syncEcoMsiFromPhone();
+    var r = ecoCompute(), b = bundleTotals(), mUnit = t("unit_months");
+    var m = ecoModel();
+
+    // keep every category block in sync (selection, highlight, its own MBO line)
+    var CATS = [["watch","catWatch","selWatch","hintWatch"],
+                ["buds", "catBuds", "selBuds", "hintBuds"],
+                ["acc",  "catAcc",  "selAcc",  "hintAcc"]];
+    for(var ci=0; ci<CATS.length; ci++){
+      var key=CATS[ci][0], box=$(CATS[ci][1]), selEl=$(CATS[ci][2]), hintEl=$(CATS[ci][3]);
+      box.className = "ecocat" + (state.ecoCat === key ? " active" : "");
+      if(selEl.value !== String(state.ecoSel[key])) selEl.value = String(state.ecoSel[key]);
+      var cm = ECO_MODELS[state.ecoSel[key]] || ECO_MODELS[0];
+      var cp = state.ecoPct[key] > 0 ? Math.min(state.ecoPct[key], 100) : 0;
+      hintEl.textContent = cp > 0
+        ? tf("eco_cat_hint_off", {r:"MXN " + fmt0(cm.price), p:pctTxt(cp), v:fmt(cm.price*cp/100), f:fmt(cm.price*(1-cp/100))})
+        : tf("eco_cat_hint", {r:"MXN " + fmt0(cm.price)});
+    }
+
+    $("ecoResultModel").textContent = m.name;
+    $("ecoTermLine").textContent = r.hasTerm
+      ? (state.ecoTerm + " " + t("unit_payments") + " · " + (r.withInterest ? state.ecoRate + "% " + t("tn_rate") : t("tn_msi")))
+      : t("pick_term");
+
+    $("ecoBRRP").textContent     = "MXN " + fmt(r.rrp);
+    $("ecoBMbo").textContent     = "– MXN " + fmt(r.mbo) + (r.pct > 0 ? " (" + pctTxt(r.pct) + "%)" : "");
+    $("ecoBFinance").textContent = "MXN " + fmt(r.finance);
+    $("ecoBTerm").textContent    = r.hasTerm ? (state.ecoTerm + " " + mUnit) : t("dash");
+    $("ecoBRateRow").style.display = r.withInterest ? "flex" : "none";
+    if(r.withInterest){ $("ecoBRate").textContent = state.ecoRate + "%"; }
+    $("ecoBTotal").textContent    = r.hasTerm ? fmt(r.total) : t("dash");
+    $("ecoTotalNote").textContent = r.hasTerm ? tf("note_total", {n:state.ecoTerm, v:fmt(r.monthly)}) : "";
+
+    $("ecoStageCut").textContent = r.hasTerm
+      ? (tf("cut_split", {n:state.ecoTerm}) + (r.withInterest ? " · " + state.ecoRate + "%" : ""))
+      : t("cs_pick_cut");
+    $("ecoSalesTalk").textContent = ecoSalesTalk(r, b);
+
+    // ---- bundle summary ----
+    $("bunPhoneName").textContent = state.modelName;
+    $("bunPhoneVal").innerHTML = b.phone.hasTerm
+      ? ("MXN " + fmt(b.phone.monthly) + "<small>" + state.term + " " + mUnit + "</small>")
+      : ("<span>" + t("dash") + "</span><small>" + t("pick_term") + "</small>");
+    $("bunPhoneRow").className = "brow" + (b.phone.hasTerm ? "" : " muted");
+
+    $("bunScName").textContent = b.sc.label || t("bun_none");
+    $("bunScVal").innerHTML = b.sc.monthly > 0
+      ? ("MXN " + fmt(b.sc.monthly) + "<small>" + t("u_mo_lbl") + "</small>")
+      : (b.sc.once > 0 ? ("MXN " + fmt(b.sc.once) + "<small>" + t("bun_once") + "</small>")
+                       : ("<span>" + t("dash") + "</span>"));
+    $("bunScRow").className = "brow" + (b.sc.label ? "" : " muted");
+
+    $("bunEcoName").textContent = m.name;
+    $("bunEcoVal").innerHTML = r.hasTerm
+      ? ("MXN " + fmt(r.monthly) + "<small>" + state.ecoTerm + " " + mUnit + "</small>")
+      : ("<span>" + t("dash") + "</span><small>" + t("pick_term") + "</small>");
+    $("bunEcoRow").className = "brow" + (r.hasTerm ? "" : " muted");
+
+    $("bunGrandMonthly").textContent = b.monthly > 0 ? fmt(b.monthly) : t("dash");
+    $("bunGrandTotal").textContent = b.total > 0 ? (t("bun_total") + " MXN " + fmt(b.total)) : "";
+    $("bunGrandNote").textContent = b.once > 0 ? tf("bun_once_note", {v:fmt(b.once)}) : "";
+
+    $("stickyEcoMonthly").textContent = r.hasTerm ? fmt(r.monthly) : t("dash");
+    $("stickyEcoGrand").textContent = b.monthly > 0 ? ("MXN " + fmt(b.monthly)) : t("dash");
+
+    // running figure
+    var to = r.hasTerm ? r.monthly : r.finance;
+    $("ecoStageLab").textContent = r.hasTerm ? t("eco_res_kicker") : t("cs_pick_lab");
+    $("ecoStageLab").className = "kicker" + (r.hasTerm ? " live" : "");
+    $("ecoPlus").textContent = r.hasTerm ? "+ MXN" : "MXN";
+
+    ecoToken++; clearTimeout(ecoTimer);
+    if(ecoShown === null || reason === "settle" || reduceMotion){
+      ecoShown = to; $("ecoMonthly").textContent = fmt(to);
+      return;
+    }
+    var my = ecoToken;
+    ecoTimer = setTimeout(function(){
+      if(my !== ecoToken) return;
+      var from = ecoShown;
+      if(Math.abs(to - from) < 0.005){ ecoShown = to; $("ecoMonthly").textContent = fmt(to); return; }
+      ecoTween(from, to, 560, my);
+    }, delay == null ? 350 : delay);
+  }
+
+  function ecoQuoteText(){
+    var r = ecoCompute(), b = bundleTotals(), m = ecoModel();
+    var lines = [ t("eco_q_title") ];
+    lines.push(t("eco_q_addon") + ": " + m.name);
+    lines.push(t("q_rrp") + ": MXN " + fmt(r.rrp));
+    if(r.mbo > 0) lines.push(t("eco_bd_mbo") + " (" + pctTxt(r.pct) + "%): – MXN " + fmt(r.mbo));
+    lines.push(t("q_finance") + ": MXN " + fmt(r.finance));
+    if(r.hasTerm){
+      lines.push(t("q_term") + ": " + state.ecoTerm + " " + t("unit_months") + (r.withInterest ? " · " + state.ecoRate + "%" : " (MSI)"));
+      lines.push(t("eco_q_monthly") + ": MXN " + fmt(r.monthly));
+      lines.push(t("eco_bd_total") + ": MXN " + fmt(r.total));
+    } else {
+      lines.push(t("q_term") + ": " + t("pick_term"));
+    }
+    lines.push("");
+    lines.push(t("bun_title") + ":");
+    lines.push("· " + t("tab_smartphone") + ": " + state.modelName + (b.phone.hasTerm ? " — MXN " + fmt(b.phone.monthly) + t("u_mo") : ""));
+    if(b.sc.label) lines.push("· " + t("tab_scplus") + ": " + b.sc.label + " — MXN " + fmt(b.sc.monthly || b.sc.once) + (b.sc.monthly ? t("u_mo") : ""));
+    if(r.hasTerm) lines.push("· " + t("tab_eco") + ": " + m.name + " — MXN " + fmt(r.monthly) + t("u_mo"));
+    if(b.monthly > 0) lines.push(t("bun_permonth") + ": MXN " + fmt(b.monthly));
+    if(b.once > 0) lines.push(t("bun_once") + ": MXN " + fmt(b.once));
+    if(b.total > 0) lines.push(t("bun_total") + " MXN " + fmt(b.total));
+    lines.push(""); lines.push(t("q_disc"));
+    return lines.join("\n");
+  }
+
+  /* ================= Clips tab ================= */
+  var CLIP_KIND = { yt:"YouTube", ig:"Instagram", tt:"TikTok", fb:"Facebook", link:"YouTube" };
+
+  function clipDur(d){
+    if(d === "checkLive") return t("clip_check");
+    if(d === "Reel") return "Reel";
+    return d;
+  }
+
+  function renderClips(){
+    var wrap = $("clipsWrap");
+    wrap.innerHTML = "";
+    if($("clipModel").value !== String(state.modelIdx)) $("clipModel").value = String(state.modelIdx);
+
+    var map = CLIP_MAP[state.modelIdx];
+    if(!map || !CLIP_SETS[map.s]){
+      var em = document.createElement("div");
+      em.className = "card";
+      em.innerHTML = '<div class="clip-empty"></div>';
+      em.firstChild.textContent = tf("clip_none", {n:state.modelName});
+      wrap.appendChild(em);
+      return;
+    }
+
+    if(map.n === "fe"){
+      var note = document.createElement("div");
+      note.className = "clip-note";
+      note.textContent = t("clip_note_fe");
+      wrap.appendChild(note);
+    }
+
+    var sets = CLIP_SETS[map.s];
+    for(var i=0; i<sets.length; i++){
+      var sp = sets[i];
+      var list = sp[state.lang] || sp.en || [];
+      if(!list.length) continue;
+
+      var card = document.createElement("div");
+      card.className = "card clipsec";
+
+      var head = document.createElement("div");
+      head.className = "cs-h";
+      var ht = document.createElement("span"); ht.textContent = sp.t[state.lang] || sp.t.en;
+      var hn = document.createElement("span"); hn.className = "cs-n";
+      hn.textContent = list.length + " " + (list.length === 1 ? t("clip_one") : t("clip_many"));
+      head.appendChild(ht); head.appendChild(hn);
+      card.appendChild(head);
+
+      var body = document.createElement("div");
+      body.className = "cs-body";
+      for(var j=0; j<list.length; j++){
+        var c = list[j];
+        var a = document.createElement("a");
+        a.className = "clipcard";
+        a.href = c.u; a.target = "_blank"; a.rel = "noopener noreferrer";
+
+        var tile = document.createElement("span");
+        tile.className = "cc-tile tf-" + (c.k === "link" ? "link" : c.k);
+        tile.textContent = c.k === "link" ? t("clip_search") : CLIP_KIND[c.k];
+
+        var meta = document.createElement("span");
+        meta.className = "cc-meta";
+        if(c.p){
+          var pill = document.createElement("span");
+          pill.className = "cc-pill";
+          pill.textContent = t("clip_official");
+          meta.appendChild(pill);
+        }
+        var tt = document.createElement("b"); tt.textContent = c.t;
+        var sm = document.createElement("small"); sm.textContent = c.c + " · " + clipDur(c.d);
+        meta.appendChild(tt); meta.appendChild(sm);
+
+        var go = document.createElement("span");
+        go.className = "cc-go";
+        go.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+
+        a.appendChild(tile); a.appendChild(meta); a.appendChild(go);
+        body.appendChild(a);
+      }
+      card.appendChild(body);
+      wrap.appendChild(card);
+    }
   }
 
   function applyLang(){
@@ -3819,9 +4698,15 @@ var qrcode = function() {
     if(ogs[1]) ogs[1].label = t("grp_z");
     if(ogs[2]) ogs[2].label = t("grp_a");
     Array.prototype.forEach.call($("termToggle").children, function(b){ b.textContent = b.getAttribute("data-term") + " " + t("unit_mo"); });
+    Array.prototype.forEach.call($("ecoTermToggle").children, function(b){ b.textContent = b.getAttribute("data-term") + " " + t("unit_mo"); });
     Array.prototype.forEach.call($("langToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-lang")===state.lang ? "true":"false"); });
     render("settle");
     buildScOptions(); renderSc();
+    renderEco("settle");
+    if($("clipGrpS")){
+      $("clipGrpS").label = t("grp_s"); $("clipGrpZ").label = t("grp_z"); $("clipGrpA").label = t("grp_a");
+    }
+    renderClips();
   }
 
   // Language toggle
@@ -3845,11 +4730,26 @@ var qrcode = function() {
     }
     render("model", 120);
     if(state.tab==="scplus"){ buildScOptions(); renderSc(); }
+    renderClips();
   });
 
   // Tabs
   $("tabPhone").addEventListener("click", function(){ switchTab("phone"); });
   $("tabSc").addEventListener("click", function(){ switchTab("scplus"); });
+  $("tabEco").addEventListener("click", function(){ switchTab("eco"); });
+  $("tabClips").addEventListener("click", function(){ switchTab("clips"); });
+  $("clipModel").addEventListener("change", function(){
+    var i = parseInt(this.value,10) || 0;
+    state.modelIdx=i; state.rrp=MODELS[i].price; state.modelName=MODELS[i].name;
+    if(state.scPlan && state.scPlan!=="none"){
+      var pp=scFindPlan(state.scPlan);
+      if(!pp){ state.scPlan=null; state.scPay=null; }
+    }
+    $("model").value = String(i);          // keep the Smartphone tab in sync
+    render("model", 120);
+    buildScOptions(); renderSc();
+    renderClips();
+  });
 
   // SC+ copy / print / share / pdf
   $("scCopyBtn").addEventListener("click", function(){ doCopy(scQuoteText(), t("sc_toast_quote")); });
@@ -3879,6 +4779,57 @@ var qrcode = function() {
   });
 
   // Settings (hosting URL)
+  // ---- Add-ons tab controls ----
+  // each category block: choosing a model (or tapping the block) makes it the active add-on
+  [["watch","catWatch","selWatch"],["buds","catBuds","selBuds"],["acc","catAcc","selAcc"]].forEach(function(c){
+    var key=c[0], box=$(c[1]), sel=$(c[2]);
+    sel.addEventListener("change", function(){
+      state.ecoSel[key] = parseInt(this.value,10) || 0;
+      state.ecoCat = key;
+      renderEco("model", 120);
+    });
+    sel.addEventListener("focus", function(){
+      if(state.ecoCat !== key){ state.ecoCat = key; renderEco("model", 120); }
+    });
+    box.addEventListener("click", function(){
+      if(state.ecoCat !== key){ state.ecoCat = key; renderEco("model", 120); }
+    });
+  });
+  $("ecoPctWatch").addEventListener("input", function(){ state.ecoPct.watch = parseMoney(this.value); state.ecoCat = "watch"; renderEco("mbo", 650); });
+  $("ecoPctBuds").addEventListener("input", function(){ state.ecoPct.buds = parseMoney(this.value); state.ecoCat = "buds"; renderEco("mbo", 650); });
+  $("ecoPctAcc").addEventListener("input", function(){ state.ecoPct.acc = parseMoney(this.value); state.ecoCat = "acc"; renderEco("mbo", 650); });
+  Array.prototype.forEach.call($("ecoTermToggle").children, function(btn){
+    btn.addEventListener("click", function(){
+      state.ecoTerm = parseInt(this.getAttribute("data-term"),10);
+      Array.prototype.forEach.call($("ecoTermToggle").children, function(b){ b.setAttribute("aria-pressed", b===btn?"true":"false"); });
+      renderEco("term", 120);
+    });
+  });
+  Array.prototype.forEach.call($("ecoMsiToggle").children, function(btn){
+    btn.addEventListener("click", function(){
+      var yes = this.getAttribute("data-msi")==="yes";
+      state.ecoMsi = yes; state.ecoMsiTouched = true;
+      Array.prototype.forEach.call($("ecoMsiToggle").children, function(b){ b.setAttribute("aria-pressed", b===btn?"true":"false"); });
+      $("ecoRateField").classList.toggle("show", !yes);
+      if(yes){ $("ecoRate").value=""; state.ecoRate=0; }
+      renderEco("msi", 120);
+    });
+  });
+  $("ecoRate").addEventListener("input", function(){ state.ecoRate = parseMoney(this.value); state.ecoMsiTouched = true; renderEco("rate", 650); });
+  $("ecoCopyBtn").addEventListener("click", function(){ doCopy(ecoQuoteText(), t("toast_quote")); });
+  $("ecoCopyTalkBtn").addEventListener("click", function(){ doCopy($("ecoSalesTalk").textContent, t("toast_talk")); });
+  $("ecoShareBtn").addEventListener("click", function(){ openShare("eco"); });
+  $("ecoPdfBtn").addEventListener("click", makePDF);
+  $("ecoResetBtn").addEventListener("click", function(){
+    state.ecoCat="watch"; state.ecoSel={watch:0,buds:6,acc:10}; state.ecoPct={watch:0,buds:0,acc:0};
+    state.ecoTerm=null; state.ecoMsiTouched=false; state.ecoMsi=state.msi; state.ecoRate=state.rate;
+    $("selWatch").value="0"; $("selBuds").value="6"; $("selAcc").value="10"; $("ecoRate").value="";
+    $("ecoPctWatch").value=""; $("ecoPctBuds").value=""; $("ecoPctAcc").value="";
+    Array.prototype.forEach.call($("ecoTermToggle").children, function(b){ b.setAttribute("aria-pressed","false"); });
+    applyEcoMsiUI();
+    ecoShown = null; renderEco("reset"); toast(t("toast_reset"));
+  });
+
   $("gearBtn").addEventListener("click", openSettings);
   $("setClose").addEventListener("click", closeSettings);
   $("setModal").addEventListener("click", function(e){ if(e.target===this) closeSettings(); });
@@ -3918,10 +4869,11 @@ var qrcode = function() {
       Array.prototype.forEach.call($("msiToggle").children, function(b){ b.setAttribute("aria-pressed",(b.getAttribute("data-msi")==="yes")===yes?"true":"false"); });
       $("rateField").classList.toggle("show", !yes);
       if(yes){ $("rate").value=""; state.rate=0; }
+      syncEcoMsiFromPhone();
       render("msi", 120);
     });
   });
-  $("rate").addEventListener("input", function(){ state.rate = parseMoney(this.value); render("rate", 650); });
+  $("rate").addEventListener("input", function(){ state.rate = parseMoney(this.value); syncEcoMsiFromPhone(); render("rate", 650); });
 
   // Toast
   var toastTimer;
@@ -3971,7 +4923,7 @@ var qrcode = function() {
   // Reset
   $("resetBtn").addEventListener("click", function(){
     var lang = state.lang, tab = state.tab;
-    state = { lang:lang, tab:tab, modelIdx:0, rrp:MODELS[0].price, modelName:MODELS[0].name, tradeOn:false, tradein:0, promo:0, term:null, msi:true, rate:0, scPlan:null, scPay:null };
+    state = { lang:lang, tab:tab, modelIdx:0, rrp:MODELS[0].price, modelName:MODELS[0].name, tradeOn:false, tradein:0, promo:0, term:null, msi:true, rate:0, scPlan:null, scPay:null, ecoCat:"watch", ecoSel:{watch:0,buds:6,acc:10}, ecoPct:{watch:0,buds:0,acc:0}, ecoTerm:null, ecoMsi:true, ecoRate:0, ecoMsiTouched:false };
     $("model").value="0"; $("tradein").value=""; $("promo").value=""; $("rate").value="";
     Array.prototype.forEach.call($("tradeToggle").children, function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-trade")==="off"?"true":"false"); });
     $("tradeinField").classList.remove("show");
